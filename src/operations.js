@@ -1,0 +1,38 @@
+import { mountAccountingRecords } from "./modules/accounting/accounting.records.js";
+import { mountAuditRecords } from "./modules/audit/audit.records.js";
+import { mountCatalogRecords } from "./modules/catalog/catalog.records.js";
+import { mountContactsRecords } from "./modules/contacts/contacts.records.js";
+import { mountInventoryRecords } from "./modules/inventory/inventory.records.js";
+import { mountLogisticsRecords } from "./modules/logistics/logistics.records.js";
+import { mountPaymentsRecords } from "./modules/payments/payments.records.js";
+import { mountPayrollRecords } from "./modules/payroll/payroll.records.js";
+import { mountProcurementRecords } from "./modules/procurement/procurement.records.js";
+import { mountReturnsRecords } from "./modules/returns/returns.records.js";
+import { mountSalesOperations } from "./modules/sales/sales.operations.js";
+import { mountPaymentsOperations } from "./modules/payments/payments.operations.js";
+import { mountProcurementOperations } from "./modules/procurement/procurement.operations.js";
+import { mountInventoryOperations } from "./modules/inventory/inventory.operations.js";
+import { mountLogisticsOperations } from "./modules/logistics/logistics.operations.js";
+import { mountReturnsOperations } from "./modules/returns/returns.operations.js";
+import { mountAccountingOperations } from "./modules/accounting/accounting.operations.js";
+import { mountPayrollOperations } from "./modules/payroll/payroll.operations.js";
+export function mountOperations(app, config) {
+  mountAccountingRecords(app);
+  mountAuditRecords(app);
+  mountCatalogRecords(app);
+  mountContactsRecords(app);
+  mountInventoryRecords(app);
+  mountLogisticsRecords(app);
+  mountPaymentsRecords(app);
+  mountPayrollRecords(app);
+  mountProcurementRecords(app);
+  mountReturnsRecords(app);
+  mountSalesOperations(app, config);
+  mountPaymentsOperations(app, config);
+  mountProcurementOperations(app, config);
+  mountInventoryOperations(app, config);
+  mountLogisticsOperations(app, config);
+  mountReturnsOperations(app, config);
+  mountAccountingOperations(app, config);
+  mountPayrollOperations(app, config);
+}

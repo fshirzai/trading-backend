@@ -1,0 +1,9 @@
+{
+  "version": "2.1.0",
+  "tests": 57,
+  "passed": 57,
+  "failed": 0,
+  "scope": "unit, adapter, integration, concurrency and seeded HTTP system tests; external service tests use fixtures",
+  "lineCoverage": 94.81,
+  "branchCoverage": 88.33
+}

@@ -1,0 +1,43 @@
+{
+  "name": "trading-company-backend",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env --watch src/server.js",
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "bootstrap": "node --env-file-if-exists=.env src/bootstrap.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js",
+    "test:unit": "node --test tests/rules.test.js tests/security.test.js tests/adapters.test.js",
+    "test:integration": "node --test tests/integration.test.js",
+    "check": "node scripts/check.js",
+    "benchmark": "node scripts/benchmark.js",
+    "format": "prettier --write src tests scripts package.json README.md API.md",
+    "format:check": "prettier --check src tests scripts package.json README.md API.md",
+    "seed:demo": "node --env-file-if-exists=.env scripts/seed.js",
+    "test:system": "node --test tests/system.test.js",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=src/**/*.js --test-concurrency=1 tests/*.test.js"
+  },
+  "dependencies": {
+    "cors": "2.8.6",
+    "csv-parse": "7.0.3",
+    "express": "5.3.0",
+    "express-rate-limit": "8.7.1",
+    "helmet": "8.3.0",
+    "jsonwebtoken": "9.0.3",
+    "mongoose": "9.11.2",
+    "nodemailer": "10.1.0",
+    "otpauth": "9.5.2",
+    "pdfkit": "0.20.2",
+    "stripe": "23.0.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "11.3.0",
+    "prettier": "3.9.10",
+    "supertest": "7.3.1"
+  }
+}
