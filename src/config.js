@@ -2,6 +2,15 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 export function readConfig(env = process.env) {
   const mode = env.NODE_ENV || "development";
+  const emailBrandName = (env.EMAIL_BRAND_NAME || "Trading Company").trim();
+  if (
+    !emailBrandName ||
+    emailBrandName.length > 120 ||
+    /[\r\n]/.test(emailBrandName)
+  )
+    throw Error(
+      "EMAIL_BRAND_NAME must be 1–120 characters without line breaks",
+    );
   if (
     env.DOCUMENT_UPLOADS_ENABLED !== undefined &&
     !["true", "false"].includes(env.DOCUMENT_UPLOADS_ENABLED)
@@ -77,6 +86,7 @@ export function readConfig(env = process.env) {
     throw Error("DATA_ENCRYPTION_KEY must be a separate 32-byte base64 key");
   return {
     mode,
+    emailBrandName,
     documentUploadsEnabled,
     gatewayProvider: env.GATEWAY_PROVIDER || "disabled",
     stripeKey: env.STRIPE_SECRET_KEY,

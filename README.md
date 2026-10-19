@@ -41,6 +41,12 @@ Set `DOCUMENT_UPLOADS_ENABLED=false` in Render. Keep `NODE_ENV=production`. With
 
 Remove CLAMAV_HOST/CLAMAV_PORT if unused. Default is enabled: only the exact value `false` disables uploads. To restore uploads, provision persistent storage and a reachable scanner, then set `DOCUMENT_UPLOADS_ENABLED=true`, CLAMAV_HOST and CLAMAV_PORT=3310, and redeploy. No production test has established capacity on 512 MB RAM; watch memory, particularly during concurrent login/password hashing. Render's ephemeral filesystem is not durable document storage.
 
+## Account email appearance
+
+Verification and password-reset mail include a responsive navy/emerald HTML layout, a personalized greeting, action button, copyable fallback link, five-minute expiry and security note, with a plain-text alternative. Set optional `EMAIL_BRAND_NAME` (default `Trading Company`) in Render to change the header, subject and footer. The sender remains your verified `MAIL_FROM`. The templates use inline styles and presentation tables, with no remote images, fonts, scripts or tracking pixels. Names, branding and URLs are HTML-escaped. Token generation, hashing, encrypted outbox, expiry and one-use handling are unchanged. Existing queued jobs retain their original email body; new requests use the new template.
+
+Nonfunctional previews are in `docs/email-previews/verify.html` and `reset.html`. These use a dummy URL and never contain a real token. Actual Gmail/Outlook rendering and delivery must be checked after deployment.
+
 ## Module layout
 
 Each business module keeps its models, route/controllers, services and validation contracts in `src/modules/<module>/`. Small root registries connect the modules; `src/shared/` holds transaction, HTTP, validation, encryption and generic CRUD mechanics. Generic CRUD declarations are inside their owning module, not a central business-controller file.

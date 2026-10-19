@@ -1,4 +1,4 @@
-import { mountWorkspace } from './modules/workspace/workspace.routes.js';
+import { mountWorkspace } from "./modules/workspace/workspace.routes.js";
 import express from "express";
 import { mountFiscalClose } from "./modules/accounting/fiscal-close.routes.js";
 import { mountCardRefunds } from "./modules/payments/refunds.routes.js";

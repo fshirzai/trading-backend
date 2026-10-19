@@ -3,6 +3,7 @@ import { randomBytes } from "node:crypto";
 import { EmailToken, EmailJob } from "./email.model.js";
 import { encrypt, decrypt, digest } from "../../shared/encryption.js";
 import { requireRule, RuleError } from "../../shared/rules.js";
+import { accountEmail } from "./account-email.template.js";
 export function createMailer(config) {
   if (config.mode === "test" && config.mailer) return config.mailer;
   if (!config.smtpHost)
@@ -56,8 +57,12 @@ export async function queueToken(user, kind, config, session) {
   url.searchParams.set("token", token);
   const payload = {
     to: user.email,
-    subject: kind === "verify" ? "Verify your email" : "Reset your password",
-    text: `${kind === "verify" ? "Verify your email" : "Reset your password"}: ${url}\nThis link expires in 5 minutes. If you did not request this, ignore this email.`,
+    ...accountEmail({
+      kind,
+      name: user.name,
+      actionUrl: url.href,
+      brandName: config.emailBrandName,
+    }),
   };
   await EmailJob.create(
     [
