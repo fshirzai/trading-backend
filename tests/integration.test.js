@@ -12,6 +12,31 @@ import { readConfig } from "../src/config.js";
 import * as M from "../src/models.js";
 import { hashPassword } from "../src/modules/auth/password.service.js";
 let repl, app, config, passwordHash, dir, tokens, parties;
+test("disabled uploaded documents reject upload, download and scan without changing records", async () => {
+  const disabled = await createApp({
+    ...config,
+    documentUploadsEnabled: false,
+  });
+  const id = new mongoose.Types.ObjectId().toString();
+  const before = await M.Document.countDocuments();
+  const upload = await request(disabled)
+    .post(`/api/orders/${id}/documents`)
+    .set("Authorization", "Bearer " + tokens.admin)
+    .set("Content-Type", "application/pdf")
+    .send(Buffer.from("%PDF-test"));
+  assert.equal(upload.status, 503);
+  assert.match(upload.body.error, /disabled/);
+  await request(disabled)
+    .get(`/api/documents/${id}`)
+    .set("Authorization", "Bearer " + tokens.admin)
+    .expect(503);
+  await request(disabled)
+    .post(`/api/documents/${id}/scan`)
+    .set("Authorization", "Bearer " + tokens.admin)
+    .expect(503);
+  assert.equal(await M.Document.countDocuments(), before);
+  await request(disabled).get("/api/health/ready").expect(200);
+});
 const password = "Correct-Horse-Battery-92!";
 before(async () => {
   repl = await MongoMemoryReplSet.create({
@@ -1046,6 +1071,7 @@ test("bank reconciliation checks exact cash movement, unique matches and closing
     },
     201,
   );
+  const statementDate = new Date(j.createdAt).toISOString().slice(0, 10);
   const statement = await call(
     "admin",
     "post",
@@ -1055,7 +1081,7 @@ test("bank reconciliation checks exact cash movement, unique matches and closing
       account: "Bank",
       openingCents: 0,
       closingCents: 10000,
-      csv: "date,reference,amount\n2026-10-14,BANK-1,100.00",
+      csv: `date,reference,amount\n${statementDate},BANK-1,100.00`,
     },
     201,
   );
@@ -1094,7 +1120,7 @@ test("bank reconciliation checks exact cash movement, unique matches and closing
       account: "Bank",
       openingCents: 0,
       closingCents: 10000,
-      csv: "date,reference,amount\n2026-10-14,BANK-1,100.00",
+      csv: `date,reference,amount\n${statementDate},BANK-1,100.00`,
     },
     409,
   );

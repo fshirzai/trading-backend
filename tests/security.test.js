@@ -11,6 +11,22 @@ const base = {
   MONGODB_URI: "mongodb://127.0.0.1/test",
   JWT_SECRET: "a".repeat(64),
 };
+test("document uploads default enabled and require an explicit boolean to disable", () => {
+  assert.equal(readConfig(base).documentUploadsEnabled, true);
+  assert.equal(
+    readConfig({ ...base, DOCUMENT_UPLOADS_ENABLED: "false" })
+      .documentUploadsEnabled,
+    false,
+  );
+  assert.equal(
+    readConfig({ ...base, DOCUMENT_UPLOADS_ENABLED: "true" })
+      .documentUploadsEnabled,
+    true,
+  );
+  assert.throws(() =>
+    readConfig({ ...base, DOCUMENT_UPLOADS_ENABLED: "False" }),
+  );
+});
 test("production rejects weak secrets, HTTP origins and unconfirmed policy", () => {
   assert.throws(() => readConfig({ ...base, JWT_SECRET: "short" }));
   assert.throws(() =>

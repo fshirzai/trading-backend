@@ -24,8 +24,10 @@ await mongoose.connection
   .createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 if (config.mode === "production") {
   await createMailer(config).verify();
-  if (!config.clamHost) throw Error("CLAMAV_HOST required in production");
-  await clamScan(Buffer.from("Startup scanner check"), config);
+  if (config.documentUploadsEnabled) {
+    if (!config.clamHost) throw Error("CLAMAV_HOST required in production");
+    await clamScan(Buffer.from("Startup scanner check"), config);
+  }
 }
 const stopMail = startEmailWorker(config);
 const stopScan = startScannerWorker(config);

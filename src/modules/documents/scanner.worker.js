@@ -4,6 +4,7 @@ import { Document } from "./documents.model.js";
 import { scanFile } from "./scanner.service.js";
 import { digest } from "../../shared/encryption.js";
 export async function scanOne(config) {
+  if (config.documentUploadsEnabled === false) return false;
   const doc = await Document.findOneAndUpdate(
     {
       status: "Quarantined",
@@ -45,6 +46,7 @@ export async function scanOne(config) {
   return true;
 }
 export function startScannerWorker(config) {
+  if (config.documentUploadsEnabled === false) return () => {};
   let busy = false;
   const t = setInterval(async () => {
     if (busy) return;

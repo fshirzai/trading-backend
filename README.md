@@ -35,6 +35,12 @@ The seeder is repeat-safe, refuses production and refuses to add a demo administ
 
 API base: `http://localhost:4000/api`. Liveness/readiness: `/health/live` and `/health/ready`. See `API.md` and `openapi.json` for contracts.
 
+## Run without ClamAV (uploaded documents disabled)
+
+Set `DOCUMENT_UPLOADS_ENABLED=false` in Render. Keep `NODE_ENV=production`. With this explicit setting, startup still verifies SMTP but skips ClamAV verification and starts no scanner timer. POST `/api/orders/:id/documents`, POST `/api/documents/:id/scan` and GET `/api/documents/:id` return HTTP 503 after authentication/role checks, before file access. Existing documents keep their original statuses; nothing is automatically cleared or deleted. Metadata lists and server-generated proforma/invoice/packing-list PDFs remain available. The current TT API permits recording a transfer reference without a receipt; this setting does not change payment verification or accounting rules. The frontend document controls are unchanged and will display the API error if used while disabled.
+
+Remove CLAMAV_HOST/CLAMAV_PORT if unused. Default is enabled: only the exact value `false` disables uploads. To restore uploads, provision persistent storage and a reachable scanner, then set `DOCUMENT_UPLOADS_ENABLED=true`, CLAMAV_HOST and CLAMAV_PORT=3310, and redeploy. No production test has established capacity on 512 MB RAM; watch memory, particularly during concurrent login/password hashing. Render's ephemeral filesystem is not durable document storage.
+
 ## Module layout
 
 Each business module keeps its models, route/controllers, services and validation contracts in `src/modules/<module>/`. Small root registries connect the modules; `src/shared/` holds transaction, HTTP, validation, encryption and generic CRUD mechanics. Generic CRUD declarations are inside their owning module, not a central business-controller file.

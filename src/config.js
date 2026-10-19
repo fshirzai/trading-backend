@@ -2,6 +2,12 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 export function readConfig(env = process.env) {
   const mode = env.NODE_ENV || "development";
+  if (
+    env.DOCUMENT_UPLOADS_ENABLED !== undefined &&
+    !["true", "false"].includes(env.DOCUMENT_UPLOADS_ENABLED)
+  )
+    throw Error("DOCUMENT_UPLOADS_ENABLED must be true or false");
+  const documentUploadsEnabled = env.DOCUMENT_UPLOADS_ENABLED !== "false";
   const port = Number(env.PORT || 4000);
   const jwtSecret = env.JWT_SECRET;
   if (
@@ -71,6 +77,7 @@ export function readConfig(env = process.env) {
     throw Error("DATA_ENCRYPTION_KEY must be a separate 32-byte base64 key");
   return {
     mode,
+    documentUploadsEnabled,
     gatewayProvider: env.GATEWAY_PROVIDER || "disabled",
     stripeKey: env.STRIPE_SECRET_KEY,
     stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,

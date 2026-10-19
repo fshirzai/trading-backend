@@ -22,9 +22,20 @@ function detected(b) {
 }
 const file = (config, id) => path.join(config.uploadDir, String(id));
 export function mountDocuments(app, config) {
+  const requireUploads = (req, res, next) => {
+    if (config.documentUploadsEnabled === false)
+      return next(
+        new RuleError(
+          "Uploaded documents are disabled on this deployment",
+          503,
+        ),
+      );
+    next();
+  };
   app.post(
     "/api/orders/:id/documents",
     roles("admin", "manager", "seller", "customer"),
+    requireUploads,
     express.raw({
       type: ["application/pdf", "image/png", "image/jpeg"],
       limit: "5mb",
@@ -88,6 +99,7 @@ export function mountDocuments(app, config) {
   app.post(
     "/api/documents/:id/scan",
     roles("admin"),
+    requireUploads,
     wrap(async (req, res) => {
       const doc = await entity(Document, req.params.id);
       requireRule(doc.status === "Quarantined", "Document already scanned");
@@ -111,6 +123,7 @@ export function mountDocuments(app, config) {
   app.get(
     "/api/documents/:id",
     roles("admin", "manager", "seller", "customer"),
+    requireUploads,
     wrap(async (req, res) => {
       const doc = await entity(Document, req.params.id);
       await ownOrder(req, doc.order);

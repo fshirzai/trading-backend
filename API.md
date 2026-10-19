@@ -136,3 +136,7 @@ Precision, validation, role/ownership and business rules remain enforced by modu
 - `/me` and login include email/MFA verification flags for account security screens.
 
 No new write commands, dependency changes, data migration, or changes to existing financial business rules are introduced by v2.1.
+
+## Uploaded-document availability
+
+With `DOCUMENT_UPLOADS_ENABLED=false`, authenticated upload, scan and uploaded-file download requests return 503 with `Uploaded documents are disabled on this deployment`. Existing metadata and generated PDFs are unaffected. No document status is changed by this switch.
