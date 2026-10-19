@@ -147,3 +147,11 @@ export async function createApp(config) {
   });
   return app;
 }
+
+// Vercel detects src/app.js and requires a default request handler.
+// Render and local startup continue to call the named createApp factory.
+export default async function handler(req, res) {
+  const { default: vercelHandler } =
+    await import("./modules/platform/vercel.runtime.js");
+  return vercelHandler(req, res);
+}
