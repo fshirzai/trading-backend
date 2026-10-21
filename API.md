@@ -140,3 +140,7 @@ No new write commands, dependency changes, data migration, or changes to existin
 ## Uploaded-document availability
 
 With `DOCUMENT_UPLOADS_ENABLED=false`, authenticated upload, scan and uploaded-file download requests return 503 with `Uploaded documents are disabled on this deployment`. Existing metadata and generated PDFs are unaffected. No document status is changed by this switch.
+
+## Product image galleries
+
+See PRODUCT_IMAGES_UPDATE.md for endpoints, image limits, permissions, storage and deployment steps. Product images use MongoDB-backed normalized raster assets independently of uploaded-document availability.

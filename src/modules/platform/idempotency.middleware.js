@@ -21,6 +21,7 @@ const required =
 export function idempotencyMiddleware(req, res, next) {
   if (
     req.method !== "POST" ||
+    /^\/api\/products\/[a-f\d]{24}\/images(?:\/|$)/.test(req.originalUrl) ||
     /\/(checkout|card-refunds)$/.test(req.originalUrl) ||
     req.originalUrl.startsWith("/api/auth/") ||
     req.originalUrl === "/api/users" ||

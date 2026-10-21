@@ -52,6 +52,13 @@ export function validateRequest(req, res, next) {
     if (!query.safeParse(req.query).success)
       throw new RuleError("Invalid query parameters", 400);
     if (["POST", "PATCH", "PUT"].includes(req.method)) {
+      if (
+        req.method === "POST" &&
+        /^\/api\/products\/[a-f\d]{24}\/images(?:\/[a-f\d]{24}\/replace)?$/.test(
+          req.path,
+        )
+      )
+        return next();
       if (/^\/api\/orders\/[a-f\d]{24}\/documents$/.test(req.path))
         return next();
       const spec = schemas.find(

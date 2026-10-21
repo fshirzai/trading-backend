@@ -16,6 +16,19 @@ import {
 export const catalogSchemas = [
   [
     "POST",
+    /^\/api\/products\/[a-f\d]{24}\/images\/[a-f\d]{24}\/remove$/,
+    strict({ version: z.number().int().nonnegative() }),
+  ],
+  [
+    "PATCH",
+    /^\/api\/products\/[a-f\d]{24}\/images$/,
+    strict({
+      version: z.number().int().nonnegative(),
+      imageIds: z.array(oid).max(8),
+    }),
+  ],
+  [
+    "POST",
     /^\/api\/records\/product$/,
     strict({
       name: strict({ en: text, ps: optional, fa: optional }),

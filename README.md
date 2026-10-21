@@ -127,3 +127,7 @@ Use `npm ci --omit=dev`, production secrets/configuration and `npm start`, or th
 Serve frontend and API under the same site (custom subdomains or a Next.js API proxy) for SameSite=Strict refresh cookies. Restrict direct access to the Node port when trusting proxy headers. Use least-privilege authenticated/TLS MongoDB access, managed backups and tested restore, monitoring, secret rotation with ciphertext migration, scanner-signature updates, staging acceptance and an independent security review. These are deployment operations; source tests cannot verify a service/account that has not been configured.
 
 This release implements the named features in `REQUIREMENTS.md`. It does not claim to contain every imaginable trading-company feature or an audited statutory accounting system. Company-specific return disputes, direct supplier subledgers and external service validation are listed explicitly rather than hidden behind a “complete” label.
+
+## Multiple product images
+
+See PRODUCT_IMAGES_UPDATE.md. Products support eight persistent MongoDB-backed images, optimized thumbnails, galleries and staff management without enabling document uploads.

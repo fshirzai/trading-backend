@@ -1,5 +1,9 @@
 import { mountWorkspace } from "./modules/workspace/workspace.routes.js";
 import express from "express";
+import {
+  mountPublicProductImages,
+  mountProductImages,
+} from "./modules/catalog/product-images.routes.js";
 import { mountFiscalClose } from "./modules/accounting/fiscal-close.routes.js";
 import { mountCardRefunds } from "./modules/payments/refunds.routes.js";
 import { mountNotifications } from "./modules/notifications/notifications.routes.js";
@@ -52,6 +56,7 @@ export async function createApp(config) {
       credentials: true,
       methods: ["GET", "POST", "PATCH", "OPTIONS"],
       allowedHeaders: [
+        "X-Product-Version",
         "Content-Type",
         "Authorization",
         "X-Document-Name",
@@ -96,7 +101,9 @@ export async function createApp(config) {
     store: new MongoRateStore("auth"),
     message: { error: "Too many authentication attempts" },
   });
+  mountPublicProductImages(app);
   await mountAuth(app, config, authLimiter);
+  mountProductImages(app);
   mountOperations(app, config);
   mountWorkspace(app);
   mountNotifications(app);
