@@ -1,11 +1,15 @@
 {
-  "scope": "Local smoke benchmark, not production capacity validation",
-  "dataset": 10000,
-  "requests": 100,
-  "concurrency": 5,
-  "p50ms": 11.95,
-  "p95ms": 18.23,
-  "requestsPerSecond": 356.93,
-  "catalogKeysExamined": 25,
-  "catalogDocsExamined": 25
+  "sourceRelease": "2.1 baseline",
+  "rerunFor2_2": false,
+  "historicalResults": {
+    "scope": "Local smoke benchmark, not production capacity validation",
+    "dataset": 10000,
+    "requests": 100,
+    "concurrency": 5,
+    "p50ms": 11.95,
+    "p95ms": 18.23,
+    "requestsPerSecond": 356.93,
+    "catalogKeysExamined": 25,
+    "catalogDocsExamined": 25
+  }
 }

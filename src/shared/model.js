@@ -8,7 +8,7 @@ const options = {
 export const model = (name, fields, indexes = []) => {
   const s = new Schema(fields, options);
   for (const index of indexes) s.index(...index);
-  if (["Journal", "Audit", "Movement"].includes(name)) {
+  if (["Journal", "Audit", "Movement", "Invoice"].includes(name)) {
     s.pre("save", function () {
       if (!this.isNew) throw new Error("Append-only record cannot be modified");
     });

@@ -14,12 +14,8 @@ export function createVercelHandler({ initialize, waitUntil, drainEmails }) {
     ).pathname.replace(/\/$/, "");
     if (
       req.method === "POST" &&
-      [
-        "/api/auth/register",
-        "/api/auth/resend-verification",
-        "/api/auth/forgot-password",
-        "/api/users",
-      ].includes(pathname)
+      !pathname.includes("/video/") &&
+      !pathname.includes("/images")
     ) {
       const completed = new Promise((resolve) => {
         res.once("finish", resolve);

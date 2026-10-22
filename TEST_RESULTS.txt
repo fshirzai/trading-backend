@@ -1,190 +1,96 @@
 npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 
-> trading-company-backend@2.1.0 test:coverage
-> node --test --experimental-test-coverage --test-coverage-include=src/**/*.js --test-concurrency=1 tests/*.test.js
+> trading-company-backend@2.2.0 test
+> node --test --test-concurrency=1 tests/*.test.js
 
-✔ encrypted sensitive data rejects a modified ciphertext (3.287713ms)
-✔ statement parser rejects duplicate references, hidden fractions and invalid dates (7.490997ms)
-✔ ClamAV adapter streams real framed bytes and rejects scanner failures (21.346185ms)
-✔ SMTP adapter enforces TLS and disables file/URL attachment access (250.747075ms)
-✔ USD provider adapter builds checkout/refund requests and verifies signed raw events (99.696204ms)
-✔ security headers, strict input, NoSQL injection, CORS and request IDs (1034.757495ms)
-✔ customer isolation and role boundaries (699.526879ms)
-✔ session rotation, refresh replay revocation and logout invalidate access (431.244099ms)
-✔ deactivated staff sessions are revoked immediately (352.417304ms)
-✔ invalid credentials are generic and repeated failures lock the account (670.144592ms)
-✔ pending TT cannot dispatch; duplicate verification cannot double credit (545.882869ms)
-✔ concurrent shipments cannot oversell stock and failed dispatch rolls back (547.783237ms)
-✔ split fees need actual acceptance and cannot claim inclusion after acceptance (570.854281ms)
-✔ full delivery, return inspection, exact 75% refund and balanced journals (663.744222ms)
-✔ partial dispatch return restores only dispatched quantity and deposit refund basis (556.489872ms)
-✔ pre-shipping cancellation full refund and expired inspection deadline rejected (683.974379ms)
-✔ direct border trade never decrements warehouse stock (491.91527ms)
-✔ fractional stock allocation conserves exact cents and tonnes (508.614266ms)
-✔ supplier payments and payroll have duplicate protection and balanced ledger (568.792278ms)
-✔ cursor pagination is bounded and stable (343.940015ms)
-✔ manual journals validate accounts; posted entries are append-only and reversal is unique (395.481298ms)
-✔ document quarantine, safe types, scanning and customer ownership (491.012521ms)
-✔ financial retry returns the same result and rejects a changed request (404.632736ms)
-✔ stock transfers preserve cost and reject overdraw (497.465729ms)
-✔ concurrent verified payments cannot exceed the order balance (461.939573ms)
-✔ expired access sessions and forged tokens are rejected (326.386488ms)
-✔ proforma revisions require reacceptance and preserve previous terms (484.521814ms)
-✔ return rejection preserves the original order state with audit (454.81808ms)
-✔ authentication rate limit is enforced through the shared MongoDB store (927.552292ms)
-✔ customer shipment responses hide supplier costs and FIFO allocation details (519.314212ms)
-✔ email verification consumes an expiring link and blocks unverified login (482.206347ms)
-✔ password reset is one-use, expires, preserves MFA and revokes sessions (517.615517ms)
-✔ MFA enrollment revokes sessions, recovery codes are one-use, and codes are encrypted (522.620145ms)
-✔ bank reconciliation checks exact cash movement, unique matches and closing (409.996328ms)
-✔ custom accounts participate in expenses and income statements (382.345691ms)
-✔ generated commercial PDF is protected and notifications are private (561.791967ms)
-✔ USD checkout verifies signatures, currency, amounts and duplicate webhooks (488.144481ms)
-✔ expired email links, resend cooldown and email-worker retries fail safely (410.529006ms)
-✔ production MFA gating permits enrollment but blocks privileged work (396.831793ms)
-✔ an infected upload cannot be marked clean by a caller (453.450665ms)
-✔ card refund is provider-confirmed, retry-safe and bounded by the return refund (482.833789ms)
-✔ fiscal-year close requires all months and preserves reported historical profit (375.292711ms)
-✔ automatic scanner worker clears quarantine only after scanning stored bytes (513.668266ms)
-✔ changing a password requires the old password and revokes existing sessions (534.47481ms)
-✔ production transport gate rejects HTTP and untrusted forwarded protocol (380.055755ms)
-✔ retains 25% of total, not 25% of deposit (2.13514ms)
-✔ pre-dispatch full refund and exact return deadline (0.537445ms)
-✔ deposit and split delivery limits (0.328754ms)
-✔ ledger rejects unbalanced and invalid entries (0.302305ms)
-✔ production rejects weak secrets, HTTP origins and unconfirmed policy (2.318092ms)
-✔ production password derivation uses random salts and verifies safely (1368.026963ms)
-✔ currency precision rejects hidden fractions and stock arithmetic is normalized (0.56207ms)
-✔ seeded system runs a complete trade through an actual HTTP server process (2321.975682ms)
-✔ staff listing exposes only safe public fields and enforces roles (941.820453ms)
-✔ dashboard aggregates all rows and isolates customer scope (93.088207ms)
-✔ order document listing requires ownership and strips scanner details (45.073284ms)
-✔ display labels do not expose authentication material (8.181488ms)
-ℹ tests 57
+✔ encrypted sensitive data rejects a modified ciphertext (1.733132ms)
+✔ statement parser rejects duplicate references, hidden fractions and invalid dates (4.569763ms)
+✔ ClamAV adapter streams real framed bytes and rejects scanner failures (12.061721ms)
+✔ SMTP adapter enforces TLS and disables file/URL attachment access (175.638138ms)
+✔ USD provider adapter builds checkout/refund requests and verifies signed raw events (62.438493ms)
+✔ verify email includes its action, expiry and matching HTML/plain-text links (1.218093ms)
+✔ reset email includes its action, expiry and matching HTML/plain-text links (0.160123ms)
+✔ HTML escapes account names, brand text and action URLs (0.476741ms)
+✔ email rendering refuses unknown kinds and unsafe URL protocols (0.357892ms)
+✔ email brand configuration defaults safely and rejects multiline subjects (1.047866ms)
+✔ disabled uploaded documents reject upload, download and scan without changing records (1058.305079ms)
+✔ security headers, strict input, NoSQL injection, CORS and request IDs (349.682486ms)
+✔ customer isolation and role boundaries (517.746532ms)
+✔ session rotation, refresh replay revocation and logout invalidate access (384.780866ms)
+✔ deactivated staff sessions are revoked immediately (298.998658ms)
+✔ invalid credentials are generic and repeated failures lock the account (592.773113ms)
+✔ pending TT cannot dispatch; duplicate verification cannot double credit (577.846962ms)
+✔ concurrent shipments cannot oversell stock and failed dispatch rolls back (559.557978ms)
+✔ split fees need actual acceptance and cannot claim inclusion after acceptance (572.080751ms)
+✔ full delivery, return inspection, exact 75% refund and balanced journals (694.719218ms)
+✔ partial dispatch return restores only dispatched quantity and deposit refund basis (566.969258ms)
+✔ pre-shipping cancellation full refund and expired inspection deadline rejected (840.004892ms)
+✔ direct border trade never decrements warehouse stock (497.94421ms)
+✔ fractional stock allocation conserves exact cents and tonnes (510.764252ms)
+✔ supplier payments and payroll have duplicate protection and balanced ledger (542.748448ms)
+✔ cursor pagination is bounded and stable (314.156216ms)
+✔ manual journals validate accounts; posted entries are append-only and reversal is unique (329.632027ms)
+✔ document quarantine, safe types, scanning and customer ownership (467.737735ms)
+✔ financial retry returns the same result and rejects a changed request (384.233868ms)
+✔ stock transfers preserve cost and reject overdraw (523.078314ms)
+✔ concurrent verified payments cannot exceed the order balance (605.388448ms)
+✔ expired access sessions and forged tokens are rejected (356.468652ms)
+✔ proforma revisions require reacceptance and preserve previous terms (527.024951ms)
+✔ return rejection preserves the original order state with audit (455.930386ms)
+✔ authentication rate limit is enforced through the shared MongoDB store (838.781926ms)
+✔ customer shipment responses hide supplier costs and FIFO allocation details (535.645048ms)
+✔ email verification consumes an expiring link and blocks unverified login (444.94788ms)
+✔ password reset is one-use, expires, preserves MFA and revokes sessions (529.429896ms)
+✔ MFA enrollment revokes sessions, recovery codes are one-use, and codes are encrypted (502.395418ms)
+✔ bank reconciliation checks exact cash movement, unique matches and closing (359.88867ms)
+✔ custom accounts participate in expenses and income statements (358.223028ms)
+✔ generated commercial PDF is protected and notifications are private (475.807316ms)
+✔ USD checkout verifies signatures, currency, amounts and duplicate webhooks (424.447467ms)
+✔ expired email links, resend cooldown and email-worker retries fail safely (451.62205ms)
+✔ MFA is optional for all roles including privileged staff (366.246416ms)
+✔ an infected upload cannot be marked clean by a caller (462.16329ms)
+✔ card refund is provider-confirmed, retry-safe and bounded by the return refund (497.607572ms)
+✔ fiscal-year close requires all months and preserves reported historical profit (370.795337ms)
+✔ automatic scanner worker clears quarantine only after scanning stored bytes (511.851806ms)
+✔ changing a password requires the old password and revokes existing sessions (507.411941ms)
+✔ production transport gate rejects HTTP and untrusted forwarded protocol (356.992573ms)
+✔ multiple images persist in MongoDB, publish optimized images and can be reordered/replaced/removed (1063.565214ms)
+✔ image writes enforce role, file bounds, signatures and active-product visibility (331.488981ms)
+✔ concurrent uploads and stale changes cannot exceed limits, lose images or leave orphans (438.614684ms)
+✔ normalization rotates, resizes, strips metadata and rejects invalid image data (410.887395ms)
+✔ retains 25% of total, not 25% of deposit (1.308691ms)
+✔ pre-dispatch full refund and exact return deadline (0.342629ms)
+✔ deposit and split delivery limits (0.242597ms)
+✔ ledger rejects unbalanced and invalid entries (0.25787ms)
+✔ disabled scanner performs no database work even without a connection (0.737316ms)
+✔ document uploads default enabled and require an explicit boolean to disable (1.642416ms)
+✔ production rejects weak secrets, HTTP origins and unconfirmed policy (0.286584ms)
+✔ production password derivation uses random salts and verifies safely (1293.231776ms)
+✔ currency precision rejects hidden fractions and stock arithmetic is normalized (0.529692ms)
+✔ seeded system runs a complete trade through an actual HTTP server process (2427.083064ms)
+✔ accepted shortage -> linked purchase -> reservations -> split handover -> warehouse return and exact refund (1563.697145ms)
+✔ multiple product lines reserve and dispatch independently and settle full order value (254.516542ms)
+✔ video chunk upload supports range playback, permissions and inactive product isolation (104.572009ms)
+✔ queued email, notification search and delivery visibility preserve role boundaries (31.215741ms)
+✔ snapshot backup restores into an isolated database and rejects a modified archive (4568.397391ms)
+✔ dry-run migration is read-only and repeated migration preserves financial values and accepted snapshots (1157.76079ms)
+✔ issued invoices preserve commercial snapshots and cannot be modified (56.120278ms)
+✔ concurrent order acceptance cannot reserve the same stock twice (175.406587ms)
+✔ actual default entrypoint initializes MongoDB and serves readiness and catalog over HTTP (1101.683004ms)
+✔ Vercel entrypoint exports a request function without starting a server on import (0.770166ms)
+✔ concurrent requests share initialization and failed initialization can be retried (0.613768ms)
+✔ email work is registered before dispatch, runs after successful response and skips failed responses (0.526206ms)
+✔ client disconnect does not start email work for an incomplete response (0.423691ms)
+✔ serverless mail drain respects retry delay, stops when empty and bounds work (0.433005ms)
+✔ staff listing exposes only safe public fields and enforces roles (1108.94274ms)
+✔ dashboard aggregates all rows and isolates customer scope (117.403633ms)
+✔ order document listing requires ownership and strips scanner details (37.589493ms)
+✔ display labels do not expose authentication material (10.495293ms)
+ℹ tests 83
 ℹ suites 0
-ℹ pass 57
+ℹ pass 83
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 28818.427892
-ℹ start of coverage report
-ℹ -----------------------------------------------------------------------------------------
-ℹ file                             | line % | branch % | funcs % | uncovered lines
-ℹ -----------------------------------------------------------------------------------------
-ℹ src                              |        |          |         | 
-ℹ  app.js                          |  91.28 |    88.46 |   77.78 | 83-89 136-141
-ℹ  config.js                       |  98.97 |    79.55 |  100.00 | 61
-ℹ  database                        |        |          |         | 
-ℹ   seed.service.js                | 100.00 |   100.00 |  100.00 | 
-ℹ  maintenance.js                  | 100.00 |   100.00 |  100.00 | 
-ℹ  models.js                       | 100.00 |   100.00 |  100.00 | 
-ℹ  modules                         |        |          |         | 
-ℹ   accounting                     |        |          |         | 
-ℹ    accounting.model.js           | 100.00 |   100.00 |  100.00 | 
-ℹ    accounting.operations.js      |  87.50 |   100.00 |   85.71 | 89-101
-ℹ    accounting.records.js         | 100.00 |   100.00 |  100.00 | 
-ℹ    accounting.routes.js          |  86.18 |   100.00 |   92.86 | 138-148 196-214
-ℹ    accounting.validation.js      | 100.00 |   100.00 |  100.00 | 
-ℹ    chart.service.js              | 100.00 |   100.00 |  100.00 | 
-ℹ    extensions.routes.js          |  81.90 |    92.86 |   84.62 | 93-113
-ℹ    fiscal-close.routes.js        | 100.00 |    88.89 |  100.00 | 
-ℹ   audit                          |        |          |         | 
-ℹ    audit.model.js                | 100.00 |   100.00 |  100.00 | 
-ℹ    audit.records.js              | 100.00 |   100.00 |  100.00 | 
-ℹ   auth                           |        |          |         | 
-ℹ    auth.model.js                 | 100.00 |   100.00 |  100.00 | 
-ℹ    auth.routes.js                |  90.00 |    82.28 |   92.31 | 248-251 293-307 322-339
-ℹ    auth.validation.js            | 100.00 |   100.00 |  100.00 | 
-ℹ    mfa.routes.js                 |  75.00 |   100.00 |   83.33 | 76-101
-ℹ    mfa.service.js                |  77.14 |    77.78 |  100.00 | 18-25
-ℹ    password-change.routes.js     | 100.00 |    83.33 |  100.00 | 
-ℹ    password.service.js           |  92.86 |    84.62 |   83.33 | 9-11
-ℹ    recovery.routes.js            |  98.33 |    81.82 |  100.00 | 51 54
-ℹ   catalog                        |        |          |         | 
-ℹ    catalog.model.js              | 100.00 |   100.00 |  100.00 | 
-ℹ    catalog.records.js            | 100.00 |   100.00 |  100.00 | 
-ℹ    catalog.validation.js         | 100.00 |   100.00 |  100.00 | 
-ℹ   contacts                       |        |          |         | 
-ℹ    contacts.model.js             | 100.00 |   100.00 |  100.00 | 
-ℹ    contacts.records.js           | 100.00 |    75.00 |  100.00 | 
-ℹ    contacts.validation.js        | 100.00 |   100.00 |  100.00 | 
-ℹ   documents                      |        |          |         | 
-ℹ    documents.model.js            | 100.00 |   100.00 |  100.00 | 
-ℹ    documents.routes.js           |  97.74 |    77.42 |   88.89 | 82-84
-ℹ    documents.validation.js       | 100.00 |   100.00 |  100.00 | 
-ℹ    generated-documents.routes.js | 100.00 |    83.33 |  100.00 | 
-ℹ    scanner.service.js            |  88.89 |    58.82 |   70.00 | 35-37 50-52 56
-ℹ    scanner.worker.js             |  67.19 |    50.00 |   75.00 | 35-44 50-60
-ℹ   email                          |        |          |         | 
-ℹ    email.model.js                | 100.00 |   100.00 |  100.00 | 
-ℹ    email.service.js              |  83.56 |    75.00 |   70.00 | 10-16 91-96 132-142
-ℹ   inventory                      |        |          |         | 
-ℹ    inventory.model.js            | 100.00 |   100.00 |  100.00 | 
-ℹ    inventory.operations.js       |  92.55 |    83.33 |  100.00 | 57-63
-ℹ    inventory.records.js          | 100.00 |   100.00 |  100.00 | 
-ℹ    inventory.validation.js       | 100.00 |   100.00 |  100.00 | 
-ℹ   logistics                      |        |          |         | 
-ℹ    logistics.model.js            | 100.00 |   100.00 |  100.00 | 
-ℹ    logistics.operations.js       | 100.00 |    91.18 |   87.50 | 
-ℹ    logistics.records.js          | 100.00 |   100.00 |  100.00 | 
-ℹ    logistics.validation.js       | 100.00 |   100.00 |  100.00 | 
-ℹ   notifications                  |        |          |         | 
-ℹ    notifications.model.js        | 100.00 |   100.00 |  100.00 | 
-ℹ    notifications.routes.js       | 100.00 |   100.00 |  100.00 | 
-ℹ    notifications.validation.js   | 100.00 |   100.00 |  100.00 | 
-ℹ   payments                       |        |          |         | 
-ℹ    gateway.routes.js             |  92.35 |    76.19 |  100.00 | 133-138 148-154
-ℹ    gateway.service.js            |  96.55 |    75.00 |  100.00 | 16-17
-ℹ    payments.maintenance.js       |  50.00 |   100.00 |   50.00 | 16-33
-ℹ    payments.model.js             | 100.00 |   100.00 |  100.00 | 
-ℹ    payments.operations.js        |  94.37 |    94.12 |  100.00 | 52-59
-ℹ    payments.records.js           | 100.00 |   100.00 |  100.00 | 
-ℹ    payments.validation.js        | 100.00 |   100.00 |  100.00 | 
-ℹ    refunds.routes.js             |  88.57 |    84.21 |   71.43 | 77-88
-ℹ   payroll                        |        |          |         | 
-ℹ    payroll.model.js              | 100.00 |   100.00 |  100.00 | 
-ℹ    payroll.operations.js         | 100.00 |   100.00 |  100.00 | 
-ℹ    payroll.records.js            | 100.00 |   100.00 |  100.00 | 
-ℹ    payroll.validation.js         | 100.00 |   100.00 |  100.00 | 
-ℹ   platform                       |        |          |         | 
-ℹ    idempotency.middleware.js     | 100.00 |    96.00 |  100.00 | 
-ℹ    platform.model.js             | 100.00 |   100.00 |  100.00 | 
-ℹ    rate-limit.store.js           |  64.86 |   100.00 |   60.00 | 23-30 32-36
-ℹ   procurement                    |        |          |         | 
-ℹ    procurement.model.js          | 100.00 |   100.00 |  100.00 | 
-ℹ    procurement.operations.js     | 100.00 |   100.00 |  100.00 | 
-ℹ    procurement.records.js        | 100.00 |   100.00 |  100.00 | 
-ℹ    procurement.validation.js     | 100.00 |   100.00 |  100.00 | 
-ℹ   reconciliation                 |        |          |         | 
-ℹ    reconciliation.model.js       | 100.00 |   100.00 |  100.00 | 
-ℹ    reconciliation.routes.js      | 100.00 |   100.00 |   94.12 | 
-ℹ    reconciliation.service.js     | 100.00 |   100.00 |  100.00 | 
-ℹ    reconciliation.validation.js  | 100.00 |   100.00 |  100.00 | 
-ℹ   returns                        |        |          |         | 
-ℹ    returns.maintenance.js        | 100.00 |   100.00 |  100.00 | 
-ℹ    returns.model.js              | 100.00 |   100.00 |  100.00 | 
-ℹ    returns.operations.js         | 100.00 |   100.00 |   90.91 | 
-ℹ    returns.records.js            | 100.00 |   100.00 |  100.00 | 
-ℹ    returns.validation.js         | 100.00 |   100.00 |  100.00 | 
-ℹ   sales                          |        |          |         | 
-ℹ    sales.maintenance.js          | 100.00 |    90.91 |  100.00 | 
-ℹ    sales.model.js                | 100.00 |   100.00 |  100.00 | 
-ℹ    sales.operations.js           |  90.82 |    77.78 |   90.00 | 106-120 182-185
-ℹ    sales.validation.js           | 100.00 |   100.00 |  100.00 | 
-ℹ   workspace                      |        |          |         | 
-ℹ    workspace.routes.js           |  95.77 |    90.91 |  100.00 | 98-103
-ℹ  operations.js                   | 100.00 |   100.00 |  100.00 | 
-ℹ  server.js                       |  93.22 |    55.56 |   75.00 | 26-29
-ℹ  shared                          |        |          |         | 
-ℹ   encryption.js                  | 100.00 |   100.00 |  100.00 | 
-ℹ   model.js                       | 100.00 |    87.50 |  100.00 | 
-ℹ   records.js                     |  95.24 |    93.33 |  100.00 | 50-52
-ℹ   rules.js                       | 100.00 |   100.00 |  100.00 | 
-ℹ   services.js                    |  99.55 |    93.15 |  100.00 | 53
-ℹ   validation.js                  | 100.00 |   100.00 |  100.00 | 
-ℹ  validation.js                   | 100.00 |    85.71 |  100.00 | 
-ℹ -----------------------------------------------------------------------------------------
-ℹ all files                        |  94.81 |    88.33 |   91.55 | 
-ℹ -----------------------------------------------------------------------------------------
-ℹ end of coverage report
+ℹ duration_ms 42361.53118

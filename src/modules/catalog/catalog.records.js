@@ -18,7 +18,7 @@ export function mountCatalogRecords(app) {
     "product",
     Product,
     ["admin", "manager", "procurement"],
-    ["name", "category", "grade", "origin", "packaging", "moq"],
+    ["name", "sku", "unit", "category", "grade", "origin", "packaging", "moq"],
   );
   patchRecord(app, "product", Product, ["admin", "manager", "procurement"]);
 }

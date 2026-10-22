@@ -15,3 +15,5 @@ export * from "./modules/platform/platform.model.js";
 export * from "./modules/email/email.model.js";
 export * from "./modules/reconciliation/reconciliation.model.js";
 export * from "./modules/notifications/notifications.model.js";
+
+export { Invoice } from "./modules/sales/invoices.model.js";

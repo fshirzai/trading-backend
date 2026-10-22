@@ -1,3 +1,12 @@
+import {
+  mountPublicVideo,
+  mountProductVideo,
+} from "./modules/catalog/product-video.routes.js";
+import { mountReceipts } from "./modules/documents/receipts.routes.js";
+import {
+  mountWorkerPublic,
+  mountNotificationDelivery,
+} from "./modules/notifications/worker.routes.js";
 import { mountWorkspace } from "./modules/workspace/workspace.routes.js";
 import express from "express";
 import {
@@ -33,6 +42,7 @@ export async function createApp(config) {
   app.set("trust proxy", config.trustProxy);
   app.use((req, res, next) => {
     req.requestId = randomUUID();
+    req.appConfig = config;
     res.setHeader("X-Request-ID", req.requestId);
     res.setHeader("Cache-Control", "no-store");
     next();
@@ -57,6 +67,7 @@ export async function createApp(config) {
       methods: ["GET", "POST", "PATCH", "OPTIONS"],
       allowedHeaders: [
         "X-Product-Version",
+        "X-Video-Chunk",
         "Content-Type",
         "Authorization",
         "X-Document-Name",
@@ -102,7 +113,12 @@ export async function createApp(config) {
     message: { error: "Too many authentication attempts" },
   });
   mountPublicProductImages(app);
+  mountPublicVideo(app);
+  mountWorkerPublic(app, config);
   await mountAuth(app, config, authLimiter);
+  mountProductVideo(app);
+  mountReceipts(app);
+  mountNotificationDelivery(app);
   mountProductImages(app);
   mountOperations(app, config);
   mountWorkspace(app);

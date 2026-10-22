@@ -25,6 +25,7 @@ export const returnsSchemas = [
       returnedQuantity: z.union([qty, z.literal(0)]).default(0),
       warehouse: oid.optional(),
       note,
+      refundReference: text.optional(),
     }),
   ],
 ];

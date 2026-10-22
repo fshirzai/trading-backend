@@ -24,6 +24,21 @@ export const Order = model("Order", {
   revenueCents: { type: Number, default: 0 },
   border: { type: String, required: true },
   status: { type: String, default: "Awaiting acceptance" },
+  assignedTo: { type: Schema.Types.ObjectId, ref: "User" },
+  items: [
+    {
+      product: { type: Schema.Types.ObjectId, ref: "Product" },
+      quantity: Number,
+      productCents: Number,
+      snapshot: {
+        name: { en: String, ps: String, fa: String },
+        grade: String,
+        origin: String,
+        packaging: String,
+        unit: String,
+      },
+    },
+  ],
   productSnapshot: Schema.Types.Mixed,
   proformaHistory: [Schema.Types.Mixed],
   version: { type: Number, default: 1 },

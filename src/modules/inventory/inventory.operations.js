@@ -36,7 +36,8 @@ export function mountInventoryOperations(app, config) {
           const b = await entity(M.Batch, req.body.batch, s),
             q = positive(req.body.quantity);
           requireRule(
-            b.quantity >= q && String(b.warehouse) !== req.body.warehouse,
+            quantitySum([b.quantity, -(b.reservedQuantity || 0)]) >= q &&
+              String(b.warehouse) !== req.body.warehouse,
             "Invalid quantity or destination",
           );
           const wh = await entity(M.Warehouse, req.body.warehouse, s);
@@ -55,7 +56,8 @@ export function mountInventoryOperations(app, config) {
           }).session(s);
           if (target) {
             requireRule(
-              target.unitCostCents === b.unitCostCents,
+              target.unitCostCents === b.unitCostCents &&
+                target.condition === b.condition,
               "Batch unit costs differ",
             );
             target.quantity = quantitySum([target.quantity, q]);
@@ -66,6 +68,7 @@ export function mountInventoryOperations(app, config) {
               [
                 {
                   product: b.product,
+                  condition: b.condition,
                   warehouse: req.body.warehouse,
                   code: b.code,
                   quantity: q,

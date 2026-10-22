@@ -95,10 +95,10 @@ Error responses contain `{error,requestId,details?}`; no database traces or secr
 - POST `/auth/change-password`: `{oldPassword,newPassword,mfaCode?}`. Requires authentication; revokes sessions.
 - POST `/auth/mfa/enroll`: `{password}`; returns secret/URI for authenticator enrollment only.
 - POST `/auth/mfa/confirm`: `{code}`; activates MFA, returns recovery codes once and revokes sessions.
-- POST `/auth/mfa/disable`: `{password,code}`; refused for privileged production staff.
+- POST `/auth/mfa/disable`: `{password,code}`; available to every role with password and valid MFA code.
 - POST `/auth/login`: optional `mfaCode` (six-digit TOTP or 24-character recovery code).
 
-Registration/staff creation now queue verification. Duplicate registration gets the same generic success response without overwriting an existing account. Production Admin/Manager sessions are limited to MFA enrollment/me/logout until enrollment is completed. Staff user creation relies on unique email and does not store a replay fingerprint containing the initial password.
+Registration/staff creation now queue verification. Duplicate registration gets the same generic success response without overwriting an existing account. MFA is optional for every role. Staff user creation relies on unique email and does not store a replay fingerprint containing the initial password.
 
 ## Cards
 
@@ -144,3 +144,31 @@ With `DOCUMENT_UPLOADS_ENABLED=false`, authenticated upload, scan and uploaded-f
 ## Product image galleries
 
 See PRODUCT_IMAGES_UPDATE.md for endpoints, image limits, permissions, storage and deployment steps. Product images use MongoDB-backed normalized raster assets independently of uploaded-document availability.
+
+## Version 2.2 additions
+
+MFA is optional for all roles. Enrolled MFA remains enforced at sign-in; disabling it requires the password and valid code.
+
+- GET `/stock/summary`: staff only; product totals with per-warehouse quantities. Supports product, warehouse, search and cursor.
+- POST `/orders/{id}/reserve`: allocate available stock for an accepted open order.
+- POST `/orders/{id}/procurement-requests`: `{item?,note?}`; seller/admin/manager submits the computed shortage, not a caller-provided arbitrary quantity.
+- GET `/procurement-requests`: staff list with status/search filters. Customers cannot access procurement.
+- POST `/purchases`: optional `request` links demand; request product, order state and committed quantity are validated.
+- POST `/purchases/{id}/receive`: accepts optional `location` and persists its received batch; linked demand is fulfilled and stock reserved where appropriate.
+- Proforma issue/revise accepts optional `items:[{product,quantity,productTotal}]`. `productTotal` equals the sum of line totals. Without items, single-product behavior remains.
+- POST `/orders/{id}/shipments`: optional `item`; required for multiple lines. Dispatch checks line quantities, order-wide verified deposit and protected reservations.
+- GET `/orders/{id}`: adds items, invoices, approval/action history and role-filtered reservations, requests and purchases. Procurement receives no payment list; customers receive no internal procurement/reservations.
+- POST `/orders/{id}/receipts`: raw JPEG/PNG/WebP <=3 MiB; private normalized image stored in MongoDB. Does not require filesystem uploads or ClamAV. Returns `{id,status}`.
+- GET `/receipts/{id}`: authorized owner-order access only, normalized image download. A customer TT submission requires a valid receiptKey from its own order.
+- POST `/products/{id}/video`: staff media managers; JSON `{size,mime}` with MP4/WebM and <=30 MiB. Returns upload ID and 1 MiB chunk size.
+- POST `/products/{id}/video/{videoId}/chunks`: raw video chunk, Content-Type matches declared MIME; X-Video-Chunk integer ordinal starting at zero. Exact matching chunk retries are accepted.
+- POST `/products/{id}/video/{videoId}/complete`: atomically publish the completed video and replace the old one.
+- POST `/products/{id}/video/remove`: remove video and unfinished uploads for the product.
+- GET `/catalog/{id}/video`: active-product public video; byte ranges bounded to 1 MiB per response. Video signature is validated, but no transcoding is provided.
+- POST `/orders/{id}/invoices`: issue or reuse an immutable invoice snapshot for current commercial terms.
+- GET `/invoices/{id}/pdf`: protected historical issued-invoice PDF. Existing generated PDFs remain available as current-state documents.
+- GET `/notification-delivery`: manager/admin delivery-state list; encrypted mail payloads are excluded.
+- POST `/notification-delivery/{id}/retry`: manager/admin retries an unexpired failed job. Expired account links must be resent through account recovery instead.
+- POST `/jobs/notifications`: external scheduler, authenticated by NOTIFICATION_WORKER_KEY Bearer secret; processes bounded queued work without a user session.
+
+List query additions: bounded `search`, `status`, `from`, `to`, and product/order/warehouse where the model supports them. Filters are combined with server-derived ownership and never replace it. Domain rules and role authorization remain authoritative. Product units: tonne, kg, piece, box, bag; SKU is unique when supplied.

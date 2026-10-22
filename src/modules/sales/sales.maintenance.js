@@ -11,6 +11,7 @@ import {
   audit,
 } from "../../shared/services.js";
 import { cents, requireRule } from "../../shared/rules.js";
+import { releaseReservations } from "../inventory/reservations.service.js";
 export function mountSalesMaintenance(app, config) {
   app.post(
     "/api/orders/:id/revise",
@@ -29,7 +30,9 @@ export function mountSalesMaintenance(app, config) {
             !["Refunded", "Return requested"].includes(o.status),
             "Order closed",
           );
+          await releaseReservations(o.id, s);
           o.proformaHistory.push({
+            items: o.items,
             version: o.version,
             productSnapshot: o.productSnapshot,
             productCents: o.productCents,
@@ -43,6 +46,40 @@ export function mountSalesMaintenance(app, config) {
             reason: req.body.reason,
           });
           o.version++;
+          if (req.body.items) {
+            const rows = [];
+            for (const row of req.body.items) {
+              const p = await entity(M.Product, row.product, s);
+              requireRule(
+                p.active && row.quantity >= (p.moq || 0),
+                "Product unavailable or below minimum order",
+              );
+              rows.push({
+                product: p.id,
+                quantity: row.quantity,
+                productCents: cents(row.productTotal),
+                snapshot: {
+                  name: p.name,
+                  grade: p.grade,
+                  origin: p.origin,
+                  packaging: p.packaging,
+                  unit: p.unit,
+                },
+              });
+            }
+            requireRule(
+              rows.reduce((n, x) => n + x.productCents, 0) ===
+                cents(req.body.productTotal),
+              "Product total must equal sum of quotation lines",
+            );
+            o.items = rows;
+          } else if (o.items?.length > 1)
+            requireRule(
+              false,
+              "Supply all quotation lines when revising multiple products",
+            );
+          else if (o.items?.length === 1)
+            o.items[0].productCents = cents(req.body.productTotal);
           o.productCents = cents(req.body.productTotal);
           o.feesCents = req.body.deliveryFees
             ? cents(req.body.deliveryFees)

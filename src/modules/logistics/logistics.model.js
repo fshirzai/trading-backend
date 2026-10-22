@@ -2,6 +2,9 @@ import { model, Schema } from "../../shared/model.js";
 export const Shipment = model("Shipment", {
   order: { type: Schema.Types.ObjectId, ref: "Order", required: true },
   quantity: { type: Number, required: true },
+  item: String,
+  product: { type: Schema.Types.ObjectId, ref: "Product" },
+  saleCents: Number,
   direct: { type: Boolean, default: false },
   sourceBorder: String,
   warehouse: { type: Schema.Types.ObjectId, ref: "Warehouse" },

@@ -26,6 +26,11 @@ import {
   ownOrder,
   list,
 } from "../../shared/services.js";
+import {
+  orderItems,
+  itemId,
+  consumeReservation,
+} from "../inventory/reservations.service.js";
 export function mountLogisticsOperations(app, config) {
   app.post(
     "/api/orders/:id/shipments",
@@ -36,7 +41,27 @@ export function mountLogisticsOperations(app, config) {
           const o = await ownOrder(req, req.params.id, s),
             prior = await M.Shipment.find({ order: o.id }).session(s),
             q = positive(req.body.quantity);
-          canDispatch(o, q, quantitySum(prior.map((x) => x.quantity)));
+          const items = orderItems(o);
+          requireRule(
+            items.length === 1 || req.body.item,
+            "Select an order item",
+          );
+          const item = items.find(
+            (i) => itemId(i) === (req.body.item || itemId(items[0])),
+          );
+          requireRule(item, "Invalid order item");
+          const priorItem = prior.filter(
+            (x) => (x.item || "legacy") === itemId(item),
+          );
+          canDispatch(
+            { ...o.toObject(), quantity: item.quantity },
+            q,
+            quantitySum(priorItem.map((x) => x.quantity)),
+          );
+          const beforeQty = quantitySum(priorItem.map((x) => x.quantity));
+          const saleCents =
+            Math.round((item.productCents * (beforeQty + q)) / item.quantity) -
+            Math.round((item.productCents * beforeQty) / item.quantity);
           const feeCents = req.body.additionalFee
             ? cents(req.body.additionalFee)
             : 0;
@@ -61,6 +86,14 @@ export function mountLogisticsOperations(app, config) {
               req.body.directCost !== undefined,
               "Direct trade purchase cost required",
             );
+            requireRule(
+              !(await M.StockReservation.exists({
+                order: o.id,
+                item: itemId(item),
+                status: "Active",
+              }).session(s)),
+              "Release warehouse allocation before direct sourcing; use warehouse dispatch for reserved stock",
+            );
             costCents = cents(req.body.directCost);
             await post(
               req,
@@ -77,7 +110,7 @@ export function mountLogisticsOperations(app, config) {
             const wh = await entity(M.Warehouse, req.body.warehouse, s);
             requireRule(wh.active, "Warehouse inactive");
             const batches = await M.Batch.find({
-              product: o.product,
+              product: item.product,
               warehouse: req.body.warehouse,
               quantity: { $gt: 0 },
               condition: "Good",
@@ -88,10 +121,31 @@ export function mountLogisticsOperations(app, config) {
               quantitySum(batches.map((b) => b.quantity)) >= q,
               "Insufficient warehouse stock",
             );
+            const held = await M.StockReservation.find({
+              order: o.id,
+              item: itemId(item),
+              status: "Active",
+            }).session(s);
+            const available = (b) =>
+              quantitySum([
+                b.quantity,
+                -(b.reservedQuantity || 0),
+                quantitySum(
+                  held
+                    .filter((r) => String(r.batch) === b.id)
+                    .map((r) => r.quantity),
+                ),
+              ]);
+            requireRule(
+              quantitySum(batches.map(available)) >= q,
+              "Insufficient unreserved warehouse stock",
+            );
             let rem = q;
             for (const b of batches) {
               if (rem <= 0) break;
-              const used = Math.min(b.quantity, rem);
+              const used = Math.min(available(b), rem);
+              if (used <= 0) continue;
+              await consumeReservation(o.id, itemId(item), b, used, s);
               const usedCost =
                 used === b.quantity
                   ? b.valueCents
@@ -143,6 +197,9 @@ export function mountLogisticsOperations(app, config) {
             [
               {
                 order: o.id,
+                item: itemId(item),
+                product: item.product,
+                saleCents,
                 quantity: q,
                 direct: req.body.direct === true,
                 sourceBorder: req.body.sourceBorder,
@@ -196,13 +253,37 @@ export function mountLogisticsOperations(app, config) {
               status: "Handed over",
             }).session(s),
             qty = quantitySum([...prior.map((x) => x.quantity), sh.quantity]);
+          const deliveredProductCents =
+            prior.reduce(
+              (n, x) =>
+                n +
+                (x.saleCents ??
+                  Math.round((o.productCents * x.quantity) / o.quantity)),
+              0,
+            ) +
+            (sh.saleCents ??
+              Math.round((o.productCents * sh.quantity) / o.quantity));
+          const final = orderItems(o).every(
+            (i) =>
+              quantitySum(
+                [...prior, sh]
+                  .filter((x) => (x.item || "legacy") === itemId(i))
+                  .map((x) => x.quantity),
+              ) >= i.quantity,
+          );
+          const needed = final
+            ? o.totalCents
+            : Math.min(
+                o.totalCents,
+                Math.ceil(o.productCents / 2) +
+                  Math.floor(deliveredProductCents / 2) +
+                  o.feesCents,
+              );
           requireRule(
-            o.paidCents >= deliveryBalance(o, qty),
+            o.paidCents >= needed,
             "Collect balance for this delivery and additional fees first",
           );
-          const value =
-            Math.round((o.productCents * qty) / o.quantity) - o.revenueCents;
-          const final = qty >= o.quantity;
+          const value = deliveredProductCents - o.revenueCents;
           const recognized = value + (final ? o.feesCents : 0),
             dep = Math.min(o.depositCents, recognized),
             ar = recognized - dep;

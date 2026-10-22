@@ -17,12 +17,18 @@ export const procurementSchemas = [
   [
     "POST",
     /^\/api\/purchases$/,
-    strict({ supplier: oid, product: oid, quantity: qty, totalCost: amount }),
+    strict({
+      supplier: oid,
+      product: oid,
+      quantity: qty,
+      totalCost: amount,
+      request: oid.optional(),
+    }),
   ],
   [
     "POST",
     /^\/api\/purchases\/[a-f\d]{24}\/receive$/,
-    strict({ warehouse: oid, batchCode: text }),
+    strict({ warehouse: oid, batchCode: text, location: optional }),
   ],
   [
     "POST",

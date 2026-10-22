@@ -1,13 +1,21 @@
-# Verification report — 2026-10-14
+# Version 2.2 verification
 
-The test log is retained in TEST_RESULTS.txt. This release passed unit, adapter, MongoDB integration, concurrency and seeded HTTP process system tests. Line/branch/function coverage is measured for src/**/*.js, excluding test files. Passing tests are not a proof of perfect security or exhaustive behavior.
+Verified locally on 23 October 2026 with Node.js 24.19.0.
 
-The system test seeds a disposable replica set twice (idempotence), starts src/server.js in a child Node process, logs in role accounts, accepts a proforma, verifies TT deposits, dispatches, collects the balance, confirms border handover, returns goods, processes a refund, and checks inventory and the balanced ledger.
+| Check | Result |
+|---|---|
+| Backend suite | 83 passed, zero failed |
+| Backend syntax and formatting | Passed |
+| Frontend unit/contract/proxy suite | 22 passed |
+| Frontend DOM/UI suite | 11 passed |
+| Full-stack API/proxy integration | 1 passed |
+| Development CLI system test | 1 passed |
+| Standard production build | Passed |
+| Vercel rewrite production build | Passed |
+| Dependency audits | Zero reported vulnerabilities in both audits |
 
-Adapter tests inspect TLS options, cryptographic signatures, USD request bodies, replay keys and streaming ClamAV frames. SMTP/Stripe adapters use test doubles for network calls; no external merchant charge/refund or real SMTP delivery was attempted. ClamAV protocol tests use a local protocol fixture, not a production daemon with virus definitions.
+Backend additions cover warehouse totals, reservation concurrency, shortages and linked receipts, multiple order products, split handovers, exact refund and returned batch linkage, video chunks/ranges and permissions, queued notifications, snapshot backup/isolated restore with checksum tampering, repeatable migration, immutable invoice history. Existing role, auth, payment, ledger, return-window and transaction regression tests remain included.
 
-The benchmark is a local 10,000-product read smoke test; it does not measure production capacity or failover. Audit results describe known dependency advisories only. The Dockerfile and CI workflow are supplied but a Docker image/build or remote GitHub CI run was not executed here.
+These results do not certify live hosting, actual SMTP credentials, real bank funds, provider checkout, browser codec support or production load. The video fixture tests byte transport and signatures, not browser decoding. Backups were restored against disposable local replica-set databases; no production data was accessed.
 
-Company-specific return disputes/partial returns/inspection samples and live provider/account suitability remain explicit in REQUIREMENTS.md. Activate live service configurations and run staging acceptance, restore checks and independent security review before launch.
-
-The v2.1 run passed **57 tests**, with **94.81% source line coverage**. Four new seeded integration tests cover safe staff projection, role restrictions, customer dashboard isolation across more than one page, private document metadata and display labels. Existing 53 tests continue to pass.
+Read UPGRADE_2.2.md (or the root UPGRADE_GUIDE.md) for deployment, migration and operational limits.

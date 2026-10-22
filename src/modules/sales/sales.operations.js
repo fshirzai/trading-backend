@@ -27,6 +27,7 @@ import {
   list,
   attachLabels,
 } from "../../shared/services.js";
+import { reserveOrder, orderItems } from "../inventory/reservations.service.js";
 export function mountSalesOperations(app, config) {
   app.get(
     "/api/orders",
@@ -46,8 +47,31 @@ export function mountSalesOperations(app, config) {
       const o = await ownOrder(req, req.params.id);
       const labeled = o.toObject();
       await attachLabels(M.Order, [labeled]);
+      const internal = req.user.role !== "customer";
       res.json({
         order: labeled,
+        invoices: await M.Invoice.find({ order: o.id })
+          .select("number createdAt snapshot.totalCents order")
+          .lean(),
+        reservations: internal
+          ? await M.StockReservation.find({ order: o.id, status: "Active" })
+              .populate("batch", "warehouse location code")
+              .lean()
+          : [],
+        procurementRequests: internal
+          ? await M.ProcurementRequest.find({ order: o.id }).lean()
+          : [],
+        purchases:
+          internal &&
+          ["admin", "manager", "procurement"].includes(req.user.role)
+            ? await M.Purchase.find({ order: o.id }).lean()
+            : [],
+        history: await M.Audit.find({
+          $or: [{ entity: "Order", entityId: o.id }, { "details.order": o.id }],
+        })
+          .select(internal ? "" : "action createdAt entity")
+          .sort({ createdAt: 1 })
+          .lean(),
         shipments: await M.Shipment.find({ order: o.id })
           .select(
             req.user.role === "customer"
@@ -55,7 +79,10 @@ export function mountSalesOperations(app, config) {
               : "",
           )
           .lean(),
-        payments: await M.Payment.find({ order: o.id }).lean(),
+        payments:
+          req.user.role === "procurement"
+            ? []
+            : await M.Payment.find({ order: o.id }).lean(),
         returns: await M.Return.find({ order: o.id }).lean(),
       });
     }),
@@ -136,9 +163,41 @@ export function mountSalesOperations(app, config) {
         );
         const product = await entity(M.Product, i.product, s);
         requireRule(product.active, "Product inactive");
+        const items = [];
+        for (const row of req.body.items || [
+          {
+            product: i.product,
+            quantity: i.quantity,
+            productTotal: req.body.productTotal,
+          },
+        ]) {
+          const pr = await entity(M.Product, row.product, s);
+          requireRule(
+            pr.active && row.quantity >= (pr.moq || 0),
+            "Product unavailable or below minimum order",
+          );
+          items.push({
+            product: pr.id,
+            quantity: row.quantity,
+            productCents: cents(row.productTotal),
+            snapshot: {
+              name: pr.name,
+              grade: pr.grade,
+              origin: pr.origin,
+              packaging: pr.packaging,
+              unit: pr.unit,
+            },
+          });
+        }
+        requireRule(
+          items.reduce((n, x) => n + x.productCents, 0) === productCents,
+          "Product total must equal sum of quotation lines",
+        );
         const [o] = await M.Order.create(
           [
             {
+              items,
+              assignedTo: req.user.id,
               inquiry: i.id,
               customer: i.customer,
               product: i.product,
@@ -185,6 +244,10 @@ export function mountSalesOperations(app, config) {
             );
           o.acceptedAt = new Date();
           o.acceptedSnapshot = {
+            items: orderItems(o).map((x) => (x.toObject ? x.toObject() : x)),
+            acceptedBy: req.user.id,
+            returnHours: o.returnHours,
+            cancellationRetentionPercent: 25,
             product: o.product,
             productSnapshot: o.productSnapshot,
             splitIncluded: o.splitIncluded,
@@ -198,6 +261,7 @@ export function mountSalesOperations(app, config) {
           };
           o.status = "Deposit pending";
           await o.save({ session: s });
+          await reserveOrder(o, s);
           await audit(req, s, "proforma.accept", "Order", o.id);
           return { order: o, paymentMethods: ["TT"], visaAvailable: false };
         }),

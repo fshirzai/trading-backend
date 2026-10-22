@@ -78,10 +78,6 @@ export function mountMfa(app, config) {
         await verifyPassword(req.body.password, u.passwordHash),
         "Invalid credentials",
       );
-      requireRule(
-        !(config.requireStaffMfa && ["admin", "manager"].includes(u.role)),
-        "MFA required for privileged staff",
-      );
       await tx(async (s) => {
         const current = await entity(User, u.id, s);
         requireRule(current.mfaEnabled, "MFA not enabled");

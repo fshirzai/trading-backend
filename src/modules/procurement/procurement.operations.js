@@ -26,6 +26,7 @@ import {
   ownOrder,
   list,
 } from "../../shared/services.js";
+import { reserveOrder } from "../inventory/reservations.service.js";
 export function mountProcurementOperations(app, config) {
   app.post(
     "/api/purchases",
@@ -35,9 +36,40 @@ export function mountProcurementOperations(app, config) {
         const supplier = await entity(M.Party, req.body.supplier, s);
         requireRule(supplier.type === "supplier", "Supplier required");
         await entity(M.Product, req.body.product, s);
+        let demand;
+        if (req.body.request) {
+          demand = await entity(M.ProcurementRequest, req.body.request, s);
+          const demandOrder = await entity(M.Order, demand.order, s);
+          requireRule(
+            demandOrder.acceptedAt &&
+              !["Return requested", "Refunded", "Delivered"].includes(
+                demandOrder.status,
+              ),
+            "Procurement order is closed or returning",
+          );
+          requireRule(
+            ["Requested", "Purchasing"].includes(demand.status) &&
+              String(demand.product) === req.body.product,
+            "Request/product mismatch or request closed",
+          );
+          const committed = await M.Purchase.find({
+            request: demand.id,
+          }).session(s);
+          requireRule(
+            quantitySum([
+              ...committed.map((p) => p.quantity),
+              req.body.quantity,
+            ]) <= demand.quantity,
+            "Purchase exceeds requested shortage",
+          );
+          demand.status = "Purchasing";
+          await demand.save({ session: s });
+        }
         const [p] = await M.Purchase.create(
           [
             {
+              request: demand?.id,
+              order: demand?.order,
               supplier: supplier.id,
               product: req.body.product,
               quantity: positive(req.body.quantity),
@@ -68,6 +100,8 @@ export function mountProcurementOperations(app, config) {
             [
               {
                 product: p.product,
+                purchase: p.id,
+                location: req.body.location,
                 warehouse: req.body.warehouse,
                 code: req.body.batchCode,
                 quantity: p.quantity,
@@ -92,6 +126,28 @@ export function mountProcurementOperations(app, config) {
             line("Inventory", p.costCents),
             line("Accounts payable", 0, p.costCents),
           ]);
+          p.receivedBatch = b.id;
+          if (p.request) {
+            const demand = await entity(M.ProcurementRequest, p.request, s);
+            demand.receivedQuantity = quantitySum([
+              demand.receivedQuantity,
+              p.quantity,
+            ]);
+            if (
+              demand.status !== "Cancelled" &&
+              demand.receivedQuantity >= demand.quantity
+            )
+              demand.status = "Received";
+            await demand.save({ session: s });
+            const o = await entity(M.Order, demand.order, s);
+            if (
+              o.acceptedAt &&
+              !["Return requested", "Refunded"].includes(o.status)
+            ) {
+              await reserveOrder(o, s);
+              await o.save({ session: s });
+            }
+          }
           p.status = "Received";
           p.receivedAt = new Date();
           await p.save({ session: s });

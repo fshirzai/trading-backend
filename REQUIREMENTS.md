@@ -5,7 +5,7 @@ The verified scope is the user's confirmed trading-company requirements and the 
 | Requirement | Backend behavior | Verification |
 | --- | --- | --- |
 | Node.js + MongoDB | Standalone API, replica-set startup check, transactional models | Integration + separately spawned server |
-| Admin/Manager/Seller/Procurement/Customer | Role checks, customer isolation, staff lifecycle, production privileged MFA | Authorization/security tests |
+| Admin/Manager/Seller/Procurement/Customer | Role checks, customer isolation, staff lifecycle, optional MFA for all roles | Authorization/security tests |
 | English/Pashto/Dari | Product translation fields; API frontend-neutral; generated PDFs English | Seed/data checks; frontend remains future work |
 | Light/dark design | Frontend responsibility | Excluded from backend release |
 | Inquiry/proforma/acceptance | Sources, versions, snapshot, revision limits/reacceptance | Integration/system |
@@ -23,7 +23,7 @@ The verified scope is the user's confirmed trading-company requirements and the 
 | USD full accounting | Double entries, chart/expenses, deposits/AR/AP, statements, supplier settlement, months/year close | Balance/reconciliation/fiscal tests; not statutory audit certification |
 | Salaries/advances, no attendance | Employee records, advance deductions, unique salary/month | Integration |
 | Email verification/forgot/reset/change | Expiring hashed links, SMTP outbox/retries, revocation | Unit/adapter/integration; actual SMTP account verification at deployment |
-| MFA | Encrypted TOTP, replay prevention, recovery codes, privileged policy | Integration/security |
+| MFA | Encrypted TOTP, replay prevention, recovery codes, optional enrollment policy | Integration/security |
 | Private documents + scanning | Safe types/path limits, integrity, ClamAV worker and access checks | Adapter/integration; live ClamAV required |
 | Commercial documents | Protected proforma/invoice/packing-list PDF | PDF response/ownership tests |
 | Notifications/audit | Private order events, append-only audit/movements/journals | Integration |

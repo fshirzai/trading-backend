@@ -48,6 +48,10 @@ export function mountPaymentsOperations(app, config) {
       );
       const out = await tx(async (s) => {
         const fresh = await ownOrder(req, o.id, s);
+        requireRule(
+          req.user.role !== "customer" || !!req.body.receiptKey,
+          "Upload a TT receipt before submitting payment",
+        );
         if (req.body.receiptKey) {
           const doc = await entity(M.Document, req.body.receiptKey, s);
           requireRule(
@@ -133,7 +137,12 @@ export function mountPaymentsOperations(app, config) {
           p.verifiedAt = new Date();
           await p.save({ session: s });
           await o.save({ session: s });
-          await audit(req, s, "payment.verify", "Payment", p.id);
+          await audit(req, s, "payment.verify", "Payment", p.id, {
+            from: "Pending",
+            to: "Verified",
+            amountCents: p.amountCents,
+            reference: p.reference,
+          });
           return p;
         }),
       );

@@ -1,3 +1,7 @@
+# Version 2.2 update
+
+Read `UPGRADE_2.2.md` before deploying. Use the migration dry run and a verified backup first.
+
 # Trading Company Backend — v2
 
 Standalone modular Node.js/Express/MongoDB backend. No frontend or browser sample-data runtime is included.
@@ -22,7 +26,7 @@ npm run bootstrap
 npm run dev
 ```
 
-Bootstrap creates one administrator with your supplied password and trusted bootstrap email. Remove `ADMIN_PASSWORD` afterwards. New customer and staff accounts must verify email. In production Admin/Manager can sign in but cannot use privileged work until enrolling in MFA.
+Bootstrap creates one administrator with your supplied password and trusted bootstrap email. Remove `ADMIN_PASSWORD` afterwards. New customer and staff accounts must verify email. MFA is optional for every role, including Admin and Manager. Enabling MFA still requires valid codes at sign-in.
 
 For a separate empty development/demo database, set `SEED_PASSWORD` and run **instead of bootstrap**:
 
@@ -74,7 +78,7 @@ Each business module keeps its models, route/controllers, services and validatio
 - Asynchronous scrypt passwords, random salts, constant-time comparison and bounded hashing concurrency. Production N=131072/r=8/p=1; tests use a smaller cost except the production-password test. Allow at least 1 GiB RAM for comfortable headroom.
 - Five-minute verification/reset links; only token hashes are stored. Reset/change revokes sessions. Resend cooldown: 1 minute, 5 minutes, then 1 hour. Forgot-password responses do not disclose account existence.
 - 15-minute access tokens and rotating HttpOnly/SameSite=Strict refresh cookies. Refresh replay revokes the session. Deactivation/role change invalidates sessions.
-- TOTP MFA secrets encrypted with AES-256-GCM; enrollment requires the password, expires after five minutes, revokes old sessions and returns ten hashed, one-use recovery codes. OTP counters prevent code replay. Privileged MFA is enforced in production.
+- TOTP MFA secrets encrypted with AES-256-GCM; enrollment requires the password, expires after five minutes, revokes old sessions and returns ten hashed, one-use recovery codes. OTP counters prevent code replay. MFA enrollment is optional for all roles.
 - Exact CORS origins, strict schemas, capped bodies/queries, generated request IDs, shared MongoDB rate limits and account lockouts. Production rejects HTTP for business routes; fixed trusted proxy hops and HTTPS termination must be configured. Liveness/readiness may be checked over the private HTTP port.
 - Integer cents, normalized tonne quantities, indexed cursor pagination, bounded pools/query timeouts, and MongoDB transactions for stock, money, journal, audit and replay records. Posted ledger/audit/stock movements cannot be edited through application models.
 - Files never use supplied names as filesystem paths. PDF/PNG/JPEG only, matching signature, 5 MiB maximum, protected attachment downloads, integrity hash and actual ClamAV result. Quarantine remains closed when scanning fails. An automatic worker retries scans; an Admin can trigger another real scan, not assert that a file is clean.
@@ -116,7 +120,7 @@ npm run benchmark
 npm audit
 ```
 
-Tests use ephemeral MongoDB replica sets, never `.env`'s company database. A first run can download MongoDB. Unit/adapter tests cover crypto, currency, CSV, TLS options, raw signatures and ClamAV streaming. Integration tests cover access/roles, recovery/MFA, stock/payment concurrency, replay, payroll, returns, reconciliation, closing and protected documents. System tests spawn the actual Node HTTP process against a repeated-seed fixture and run inquiry through paid delivery and return. `TEST_RESULTS.txt` records results and source coverage; uncovered branches remain visible. Passing tests are not proof that every possible failure or attack is covered.
+Tests use ephemeral MongoDB replica sets, never `.env`'s company database. A first run can download MongoDB. Unit/adapter tests cover crypto, currency, CSV, TLS options, raw signatures and ClamAV streaming. Integration tests cover access/roles, recovery/MFA, stock/payment concurrency, replay, payroll, returns, reconciliation, closing and protected documents. System tests spawn the actual Node HTTP process against a repeated-seed fixture and run inquiry through paid delivery and return. `TEST_RESULTS.txt` records the current test results. A new source coverage report was not generated for 2.2. Passing tests are not proof that every possible failure or attack is covered.
 
 `BENCHMARK.json` records a local smoke benchmark with 10,000 products, 100 authenticated reads, concurrency five and index work. It is not production capacity certification. `.github/workflows/backend.yml` runs checks in CI.
 

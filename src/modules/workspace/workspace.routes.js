@@ -6,12 +6,31 @@ import {
   User,
   Document,
   Inquiry,
+  ProcurementRequest,
+  Purchase,
+  Warehouse,
 } from "../../models.js";
 import { wrap, manage, roles, list, ownOrder } from "../../shared/services.js";
 export function mountWorkspace(app) {
   app.get(
     "/api/workspace/summary",
     wrap(async (req, res) => {
+      if (req.user.role === "procurement") {
+        const [requests, purchases, warehouses] = await Promise.all([
+          ProcurementRequest.countDocuments({
+            status: { $in: ["Requested", "Purchasing"] },
+          }),
+          Purchase.countDocuments({ status: "Ordered" }),
+          Warehouse.countDocuments({ active: true }),
+        ]);
+        return res.json({
+          scope: "Procurement workspace",
+          procurement: { requests, purchases, warehouses },
+          daily: [],
+          stages: [],
+          recent: [],
+        });
+      }
       const customer = req.user.role === "customer";
       const party = customer
         ? await Party.findOne({ userId: req.user.id }).select("_id").lean()
@@ -134,7 +153,8 @@ export function mountWorkspace(app) {
       const order = await ownOrder(req, req.params.id);
       res.json(
         await list(Document, { order: order.id }, req.query, {
-          select: "name kind mime size status createdAt updatedAt order",
+          select:
+            "name kind mime size status normalized createdAt updatedAt order",
         }),
       );
     }),

@@ -93,20 +93,6 @@ export function authMiddleware(config) {
       throw new RuleError("Invalid session", 401);
     if (!user.emailVerified)
       throw new RuleError("Email verification required", 403);
-    const mfaLimited =
-      config.requireStaffMfa &&
-      ["admin", "manager"].includes(user.role) &&
-      !user.mfaEnabled;
-    if (
-      mfaLimited &&
-      !/^\/api\/(me|auth\/mfa\/(enroll|confirm)|auth\/logout)/.test(
-        req.originalUrl,
-      )
-    )
-      throw new RuleError(
-        "Enroll in MFA before using privileged operations",
-        403,
-      );
     req.user = {
       id: String(user._id),
       role: user.role,

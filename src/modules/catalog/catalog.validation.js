@@ -32,6 +32,8 @@ export const catalogSchemas = [
     /^\/api\/records\/product$/,
     strict({
       name: strict({ en: text, ps: optional, fa: optional }),
+      sku: optional,
+      unit: z.enum(["tonne", "kg", "piece", "box", "bag"]).optional(),
       category: optional,
       grade: optional,
       origin: optional,
@@ -44,6 +46,8 @@ export const catalogSchemas = [
     /^\/api\/records\/product\/[a-f\d]{24}$/,
     strict({
       name: strict({ en: text, ps: optional, fa: optional }).optional(),
+      sku: optional,
+      unit: z.enum(["tonne", "kg", "piece", "box", "bag"]).optional(),
       category: optional,
       grade: optional,
       origin: optional,

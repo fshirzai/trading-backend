@@ -26,6 +26,11 @@ import {
   ownOrder,
   list,
 } from "../../shared/services.js";
+import {
+  releaseReservations,
+  orderItems,
+  itemId,
+} from "../inventory/reservations.service.js";
 export function mountReturnsOperations(app, config) {
   app.post(
     "/api/orders/:id/returns",
@@ -103,10 +108,11 @@ export function mountReturnsOperations(app, config) {
             let returnCost = 0;
             for (const sh of shipments) {
               returnCost += sh.costCents;
-              await M.Batch.create(
+              const [returnedBatch] = await M.Batch.create(
                 [
                   {
-                    product: o.product,
+                    product: sh.product || o.product,
+                    returnId: r.id,
                     warehouse: req.body.warehouse,
                     code: "RET-" + sh.id,
                     quantity: sh.quantity,
@@ -117,9 +123,12 @@ export function mountReturnsOperations(app, config) {
                 ],
                 { session: s },
               );
+              r.receivedBatches.push(returnedBatch.id);
               await M.Movement.create(
                 [
                   {
+                    batch: returnedBatch.id,
+                    actor: req.user.id,
                     quantity: sh.quantity,
                     kind: "Return",
                     order: o.id,
@@ -142,14 +151,30 @@ export function mountReturnsOperations(app, config) {
                 o.id,
               );
           }
+          await releaseReservations(o.id, s);
+          await M.ProcurementRequest.updateMany(
+            { order: o.id, status: { $in: ["Requested", "Purchasing"] } },
+            { $set: { status: "Cancelled" } },
+            { session: s },
+          );
+          r.warehouse = req.body.warehouse;
+          r.completedBy = req.user.id;
+          r.refundReference = req.body.refundReference;
           const recognized =
             o.revenueCents +
             (shipments.some((x) => x.status === "Handed over") &&
-            quantitySum(
-              shipments
-                .filter((x) => x.status === "Handed over")
-                .map((x) => x.quantity),
-            ) >= o.quantity
+            orderItems(o).every(
+              (i) =>
+                quantitySum(
+                  shipments
+                    .filter(
+                      (x) =>
+                        x.status === "Handed over" &&
+                        (x.item || "legacy") === itemId(i),
+                    )
+                    .map((x) => x.quantity),
+                ) >= i.quantity,
+            )
               ? o.feesCents
               : 0);
           if (recognized)
@@ -194,7 +219,13 @@ export function mountReturnsOperations(app, config) {
           };
           r.refundedAt = new Date();
           await r.save({ session: s });
-          await audit(req, s, "return.complete", "Return", r.id);
+          await audit(req, s, "return.complete", "Return", r.id, {
+            warehouse: r.warehouse,
+            refundCents: r.refundCents,
+            retainedCents: r.retainedCents,
+            refundReference: r.refundReference,
+            inspectionPassed: true,
+          });
           return r;
         }),
       );

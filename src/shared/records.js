@@ -4,7 +4,17 @@ export function readRecords(app, path, Model, allowed) {
   app.get(
     "/api/records/" + path,
     roles(...allowed),
-    wrap(async (req, res) => res.json(await list(Model, {}, req.query))),
+    wrap(async (req, res) =>
+      res.json(
+        await list(
+          Model,
+          path === "product" && req.user.role === "customer"
+            ? { active: true }
+            : {},
+          req.query,
+        ),
+      ),
+    ),
   );
 }
 export function createRecord(
@@ -50,10 +60,15 @@ export function patchRecord(app, path, Model, allowed) {
             body.salaryCents = cents(body.salary);
             delete body.salary;
           }
+          const before = Object.fromEntries(
+            Object.keys(body).map((k) => [k, item.toObject()[k]]),
+          );
           Object.assign(item, body);
           await item.save({ session: s });
           await audit(req, s, "record.update", path, item.id, {
             fields: Object.keys(body),
+            before,
+            after: body,
           });
           return item;
         }),

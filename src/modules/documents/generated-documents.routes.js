@@ -1,3 +1,4 @@
+import { orderItems } from "../inventory/reservations.service.js";
 import PDFDocument from "pdfkit";
 import { wrap, ownOrder, entity, roles } from "../../shared/services.js";
 import { Party } from "../contacts/contacts.model.js";
@@ -31,12 +32,18 @@ export function mountGeneratedDocuments(app, config) {
         .text("Order: " + o.id + " | Version " + o.version)
         .text("Customer: " + customer.name)
         .text("Border handover: " + o.border);
-      pdf
-        .moveDown()
-        .text("Product: " + (o.productSnapshot?.name?.en || "Product"))
-        .text("Grade: " + (o.productSnapshot?.grade || "Agreed grade"))
-        .text("Quantity: " + o.quantity + " tonnes")
-        .text("Packaging: " + (o.productSnapshot?.packaging || "As agreed"));
+      for (const item of orderItems(o))
+        pdf
+          .moveDown()
+          .text("Product: " + (item.snapshot?.name?.en || "Product"))
+          .text(
+            "Quantity: " +
+              item.quantity +
+              " " +
+              (item.snapshot?.unit || "units"),
+          )
+          .text("Packaging: " + (item.snapshot?.packaging || "As agreed"))
+          .text("Product value: USD " + (item.productCents / 100).toFixed(2));
       if (req.params.type !== "packing-list") {
         pdf
           .moveDown()

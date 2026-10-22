@@ -1,3 +1,5 @@
+import { mountInvoices } from "./modules/sales/invoices.routes.js";
+import { mountStock } from "./modules/inventory/stock.routes.js";
 import { mountAccountingRecords } from "./modules/accounting/accounting.records.js";
 import { mountAuditRecords } from "./modules/audit/audit.records.js";
 import { mountCatalogRecords } from "./modules/catalog/catalog.records.js";
@@ -17,6 +19,8 @@ import { mountReturnsOperations } from "./modules/returns/returns.operations.js"
 import { mountAccountingOperations } from "./modules/accounting/accounting.operations.js";
 import { mountPayrollOperations } from "./modules/payroll/payroll.operations.js";
 export function mountOperations(app, config) {
+  mountStock(app);
+  mountInvoices(app);
   mountAccountingRecords(app);
   mountAuditRecords(app);
   mountCatalogRecords(app);

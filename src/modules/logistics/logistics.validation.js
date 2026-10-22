@@ -18,6 +18,7 @@ export const logisticsSchemas = [
     "POST",
     /^\/api\/orders\/[a-f\d]{24}\/shipments$/,
     strict({
+      item: z.string().max(30).optional(),
       quantity: qty,
       direct: bool.default(false),
       sourceBorder: optional,

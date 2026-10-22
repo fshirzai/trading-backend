@@ -60,21 +60,34 @@ export const tx = async (fn) => {
   }
 };
 export const audit = async (req, s, action, entity, value, details = {}) => {
+  let orderId = entity === "Order" ? String(value) : null;
+  if (
+    [
+      "Payment",
+      "Shipment",
+      "Return",
+      "Purchase",
+      "ProcurementRequest",
+    ].includes(entity)
+  ) {
+    const linked = await M[entity].findById(value).session(s);
+    if (linked?.order) orderId = String(linked.order);
+  }
   const result = await M.Audit.create(
-    [{ actor: req.user.id, action, entity, entityId: String(value), details }],
+    [
+      {
+        actor: req.user.id,
+        action,
+        entity,
+        entityId: String(value),
+        details: { ...details, ...(orderId ? { order: orderId } : {}) },
+      },
+    ],
     { session: s },
   );
-  if (entity === "Order") {
-    const order = await M.Order.findById(value).session(s);
-    if (order) {
-      const party = await M.Party.findById(order.customer).session(s);
-      if (party?.userId)
-        await M.Notification.create(
-          [{ user: party.userId, action, entity, entityId: String(value) }],
-          { session: s },
-        );
-    }
-  }
+  const { notifyEvent } =
+    await import("../modules/notifications/notification.service.js");
+  await notifyEvent(req, s, action, entity, value, details);
   return result;
 };
 export const line = (account, dr = 0, cr = 0) => ({
@@ -165,9 +178,46 @@ export async function ownOrder(req, value, s) {
 }
 export async function list(Model, filter, query, options = {}) {
   const limit = query.limit ? Number(query.limit) : 25;
-  const match = { ...filter };
+  const extra = {};
+  if (query.status && Model.schema.path("status")) extra.status = query.status;
+  for (const key of ["warehouse", "product", "order"])
+    if (query[key] && Model.schema.path(key)) extra[key] = query[key];
+  if (query.from || query.to) {
+    extra.createdAt = {};
+    if (query.from) extra.createdAt.$gte = new Date(query.from);
+    if (query.to)
+      extra.createdAt.$lt = new Date(new Date(query.to).getTime() + 86400000);
+  }
   if (query.cursor)
-    match._id = { $lt: new mongoose.Types.ObjectId(query.cursor) };
+    extra._id = { $lt: new mongoose.Types.ObjectId(query.cursor) };
+  if (query.search) {
+    const escaped = query.search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const fields = [
+      "name",
+      "name.en",
+      "name.ps",
+      "name.fa",
+      "code",
+      "sku",
+      "reference",
+      "email",
+      "phone",
+      "border",
+      "reason",
+      "state",
+      "role",
+      "title",
+      "action",
+      "productSnapshot.name.en",
+    ].filter((f) => Model.schema.path(f)?.instance === "String");
+    const ors = fields.map((f) => ({
+      [f]: { $regex: escaped, $options: "i" },
+    }));
+    if (/^[a-f\d]{24}$/i.test(query.search))
+      ors.push({ _id: new mongoose.Types.ObjectId(query.search) });
+    extra.$or = ors.length ? ors : [{ _id: null }];
+  }
+  const match = { $and: [filter, extra] };
   const items = await Model.find(match)
     .select(options.select || "")
     .sort({ _id: -1 })

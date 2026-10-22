@@ -1,6 +1,6 @@
 {
   "name": "trading-company-backend",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -19,7 +19,11 @@
     "format:check": "prettier --check src tests scripts package.json README.md API.md",
     "seed:demo": "node --env-file-if-exists=.env scripts/seed.js",
     "test:system": "node --test tests/system.test.js",
-    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=src/**/*.js --test-concurrency=1 tests/*.test.js"
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=src/**/*.js --test-concurrency=1 tests/*.test.js",
+    "backup": "node --env-file-if-exists=.env scripts/backup.js",
+    "restore:check": "node --env-file-if-exists=.env scripts/restore-check.js",
+    "migrate:check": "node --env-file-if-exists=.env scripts/migrate-2.2.js",
+    "migrate:apply": "node --env-file-if-exists=.env scripts/migrate-2.2.js --apply"
   },
   "dependencies": {
     "@vercel/functions": "3.10.1",

@@ -8,6 +8,8 @@ export const Document = model("Document", {
     required: true,
   },
   name: String,
+  normalized: { type: Boolean, default: false },
+  data: { type: Buffer, select: false },
   mime: String,
   size: Number,
   sha256: String,

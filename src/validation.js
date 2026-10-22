@@ -1,3 +1,4 @@
+import { upgradeSchemas } from "./modules/platform/upgrade.validation.js";
 import { catalogSchemas } from "./modules/catalog/catalog.validation.js";
 import { contactsSchemas } from "./modules/contacts/contacts.validation.js";
 import { z } from "zod";
@@ -16,6 +17,7 @@ import { documentsSchemas } from "./modules/documents/documents.validation.js";
 import { reconciliationSchemas } from "./modules/reconciliation/reconciliation.validation.js";
 import { notificationsSchemas } from "./modules/notifications/notifications.validation.js";
 export const schemas = [
+  ...upgradeSchemas,
   ...notificationsSchemas,
   ...reconciliationSchemas,
   ...authSchemas,
@@ -33,6 +35,13 @@ export const schemas = [
 ];
 
 const querySchema = strict({
+  search: z.string().trim().max(100).optional(),
+  status: z.string().max(60).optional(),
+  warehouse: oid.optional(),
+  product: oid.optional(),
+  order: oid.optional(),
+  from: z.string().date().optional(),
+  to: z.string().date().optional(),
   limit: z
     .string()
     .regex(/^\d{1,3}$/)
@@ -42,6 +51,8 @@ const querySchema = strict({
 });
 export function validateRequest(req, res, next) {
   try {
+    if (req.path === "/api/jobs/notifications" && req.method === "POST")
+      return next();
     if (req.url.length > 2048) throw new RuleError("URL too long", 414);
     const query = req.path.startsWith("/api/reports/")
       ? strict({
@@ -57,6 +68,13 @@ export function validateRequest(req, res, next) {
         /^\/api\/products\/[a-f\d]{24}\/images(?:\/[a-f\d]{24}\/replace)?$/.test(
           req.path,
         )
+      )
+        return next();
+      if (
+        /^\/api\/products\/[a-f\d]{24}\/video\/[a-f\d]{24}\/chunks$/.test(
+          req.path,
+        ) ||
+        /^\/api\/orders\/[a-f\d]{24}\/receipts$/.test(req.path)
       )
         return next();
       if (/^\/api\/orders\/[a-f\d]{24}\/documents$/.test(req.path))

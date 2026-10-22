@@ -1,22 +1,26 @@
 {
-  "checkedAt": "2026-10-14",
-  "result": {
-    "vulnerabilities": {
-      "info": 0,
-      "low": 0,
-      "moderate": 0,
-      "high": 0,
-      "critical": 0,
-      "total": 0
-    },
-    "dependencies": {
-      "prod": 129,
-      "dev": 54,
-      "optional": 0,
-      "peer": 0,
-      "peerOptional": 0,
-      "total": 182
+  "release": "2.2.0",
+  "dependencyAudit": {
+    "auditReportVersion": 2,
+    "vulnerabilities": {},
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 157,
+        "dev": 54,
+        "optional": 27,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 237
+      }
     }
   },
-  "scope": "Known dependency advisories only; not a penetration test"
+  "note": "Dependency audit only; not a security certification."
 }

@@ -1,3 +1,4 @@
+import sharp from "sharp";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
@@ -106,11 +107,29 @@ test("seeded system runs a complete trade through an actual HTTP server process"
       );
     await call("customer", "POST", "/orders/" + order._id + "/accept", {});
     async function pay(ref) {
+      const bytes = await sharp({
+        create: { width: 80, height: 60, channels: 3, background: "#ffffff" },
+      })
+        .png()
+        .toBuffer();
+      const uploaded = await fetch(
+        base + "/orders/" + order._id + "/receipts",
+        {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + tokens.customer,
+            "Content-Type": "image/png",
+          },
+          body: bytes,
+        },
+      );
+      assert.equal(uploaded.status, 201);
+      const receipt = await uploaded.json();
       const p = await call(
         "customer",
         "POST",
         "/orders/" + order._id + "/payments",
-        { amount: 500, method: "TT", reference: ref },
+        { amount: 500, method: "TT", reference: ref, receiptKey: receipt.id },
         201,
       );
       await call("admin", "POST", "/payments/" + p._id + "/verify", {

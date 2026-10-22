@@ -5,3 +5,7 @@ node_modules/
 var/
 coverage/
 *.log
+
+*.jsonl.gz
+*.jsonl.gz.sha256
+backups/

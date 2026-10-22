@@ -16,6 +16,7 @@ export const EmailToken = model(
 export const EmailJob = model(
   "EmailJob",
   {
+    notification: { type: Schema.Types.ObjectId, ref: "Notification" },
     payload: { type: String, required: true },
     state: {
       type: String,
