@@ -141,7 +141,7 @@ export async function createApp(config) {
   mountAccounting(app);
   mountAccountingExtensions(app, config);
   mountFiscalClose(app);
-  mountMaintenance(app);
+  mountMaintenance(app, config);
   mountDocuments(app, config);
   mountGeneratedDocuments(app, config);
   mountReconciliation(app, config);

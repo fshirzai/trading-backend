@@ -68,6 +68,50 @@ after(async () => {
   await mongoose.disconnect();
   await repl?.stop();
 });
+test("payment methods load before merchant setup and honor the mounted Stripe configuration", async () => {
+  for (const role of ["admin", "manager", "seller", "customer"]) {
+    const result = (await call(role, "get", "/payment-methods").expect(200))
+      .body;
+    assert.equal(result.currency, "USD");
+    assert.equal(result.methods.find((m) => m.method === "TT").enabled, true);
+    assert.equal(
+      result.methods.find((m) => m.method === "VISA").enabled,
+      false,
+    );
+  }
+  const previous = Object.fromEntries(
+    [
+      "gatewayProvider",
+      "gatewayApproved",
+      "stripeKey",
+      "stripeWebhookSecret",
+    ].map((k) => [k, config[k]]),
+  );
+  try {
+    Object.assign(config, {
+      gatewayProvider: "stripe",
+      gatewayApproved: true,
+      stripeKey: "fixture-stripe-key",
+      stripeWebhookSecret: "fixture-webhook-secret",
+    });
+    const result = (
+      await call("customer", "get", "/payment-methods").expect(200)
+    ).body;
+    const visa = result.methods.find((m) => m.method === "VISA");
+    assert.equal(visa.enabled, true);
+    assert.equal(visa.provider, "stripe");
+    assert.ok(!JSON.stringify(result).includes("fixture-stripe-key"));
+    config.gatewayApproved = false;
+    assert.equal(
+      (
+        await call("customer", "get", "/payment-methods").expect(200)
+      ).body.methods.find((m) => m.method === "VISA").enabled,
+      false,
+    );
+  } finally {
+    Object.assign(config, previous);
+  }
+});
 test("catalog filters run server-side and product details hide inactive products", async () => {
   const p = await M.Product.create({
     name: { en: "Unique walnuts" },
