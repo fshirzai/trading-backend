@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Trading Company Backend",
-    "version": "2.5.0",
+    "version": "2.6.0",
     "description": "Runtime Zod and domain checks add precision, role and ownership constraints. API.md describes GET, raw-file, webhook and response contracts."
   },
   "servers": [
@@ -1267,6 +1267,24 @@
                           "type": "number",
                           "exclusiveMinimum": 0,
                           "maximum": 1000000000
+                        },
+                        "packaging": {
+                          "type": "string",
+                          "maxLength": 200
+                        },
+                        "bagCount": {
+                          "type": "integer",
+                          "exclusiveMinimum": 0,
+                          "maximum": 10000000
+                        },
+                        "bagWeightKg": {
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 1000000
+                        },
+                        "remarks": {
+                          "type": "string",
+                          "maxLength": 500
                         }
                       },
                       "required": [
@@ -1276,6 +1294,71 @@
                       ],
                       "additionalProperties": false
                     }
+                  },
+                  "quotationDetails": {
+                    "type": "object",
+                    "properties": {
+                      "reference": {
+                        "type": "string",
+                        "maxLength": 60,
+                        "pattern": "^[A-Za-z0-9./_-]*$"
+                      },
+                      "issueDate": {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                      },
+                      "validUntil": {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                      },
+                      "deliveryTerms": {
+                        "type": "string",
+                        "maxLength": 160
+                      },
+                      "loadingPlace": {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      "transport": {
+                        "type": "string",
+                        "maxLength": 120
+                      },
+                      "deliveryAddress": {
+                        "type": "string",
+                        "maxLength": 500
+                      },
+                      "origin": {
+                        "type": "string",
+                        "maxLength": 120
+                      },
+                      "instructions": {
+                        "type": "string",
+                        "maxLength": 1000
+                      },
+                      "notes": {
+                        "type": "string",
+                        "maxLength": 2000
+                      },
+                      "buyerContact": {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      "buyerRegistrationNo": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "buyerTaxNo": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "paymentInstructions": {
+                        "type": "string",
+                        "maxLength": 1000
+                      }
+                    },
+                    "additionalProperties": false
                   },
                   "productTotal": {
                     "type": "number",
@@ -1371,6 +1454,24 @@
                           "type": "number",
                           "exclusiveMinimum": 0,
                           "maximum": 1000000000
+                        },
+                        "packaging": {
+                          "type": "string",
+                          "maxLength": 200
+                        },
+                        "bagCount": {
+                          "type": "integer",
+                          "exclusiveMinimum": 0,
+                          "maximum": 10000000
+                        },
+                        "bagWeightKg": {
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 1000000
+                        },
+                        "remarks": {
+                          "type": "string",
+                          "maxLength": 500
                         }
                       },
                       "required": [
@@ -1380,6 +1481,71 @@
                       ],
                       "additionalProperties": false
                     }
+                  },
+                  "quotationDetails": {
+                    "type": "object",
+                    "properties": {
+                      "reference": {
+                        "type": "string",
+                        "maxLength": 60,
+                        "pattern": "^[A-Za-z0-9./_-]*$"
+                      },
+                      "issueDate": {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                      },
+                      "validUntil": {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                      },
+                      "deliveryTerms": {
+                        "type": "string",
+                        "maxLength": 160
+                      },
+                      "loadingPlace": {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      "transport": {
+                        "type": "string",
+                        "maxLength": 120
+                      },
+                      "deliveryAddress": {
+                        "type": "string",
+                        "maxLength": 500
+                      },
+                      "origin": {
+                        "type": "string",
+                        "maxLength": 120
+                      },
+                      "instructions": {
+                        "type": "string",
+                        "maxLength": 1000
+                      },
+                      "notes": {
+                        "type": "string",
+                        "maxLength": 2000
+                      },
+                      "buyerContact": {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      "buyerRegistrationNo": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "buyerTaxNo": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "paymentInstructions": {
+                        "type": "string",
+                        "maxLength": 1000
+                      }
+                    },
+                    "additionalProperties": false
                   },
                   "productTotal": {
                     "type": "number",
@@ -3276,6 +3442,48 @@
                 "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
+                  "invoiceProfile": {
+                    "type": "object",
+                    "properties": {
+                      "registrationNo": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "taxNo": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "bankName": {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      "accountName": {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      "accountNumber": {
+                        "type": "string",
+                        "maxLength": 120
+                      },
+                      "swiftCode": {
+                        "type": "string",
+                        "maxLength": 80
+                      },
+                      "paymentInstructions": {
+                        "type": "string",
+                        "maxLength": 1000
+                      },
+                      "signatoryName": {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      "signatoryPosition": {
+                        "type": "string",
+                        "maxLength": 120
+                      }
+                    },
+                    "additionalProperties": false
+                  },
                   "translations": {
                     "type": "object",
                     "properties": {

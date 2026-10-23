@@ -1,20 +1,23 @@
 {
-  "release": "2.5.0",
+  "release": "2.6.1",
   "date": "2026-10-23",
   "tests": {
-    "backendFull": 97,
-    "backendAssetFollowUp": 3,
-    "frontendUnit": 29,
-    "frontendUI": 22,
+    "backendFull": 105,
+    "proformaFocused": 7,
+    "frontendUnit": 30,
+    "frontendUI": 28,
     "frontendBackendIntegration": 1,
     "developmentEntry": 1,
-    "browserChecks": 7
+    "documentBrowserChecks": 7,
+    "browserDownloadedPDFsChecked": 2
   },
   "failed": 0,
+  "dictionaryKeysPerLanguage": 963,
   "builds": [
-    "vercel-mode",
-    "static-export"
+    "static-export",
+    "vercel-mode"
   ],
   "liveDeploymentVerified": false,
-  "productionDatabaseModified": false
+  "productionDatabaseModified": false,
+  "dependenciesAdded": false
 }

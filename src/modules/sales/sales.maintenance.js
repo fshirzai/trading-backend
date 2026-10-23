@@ -1,3 +1,7 @@
+import {
+  quoteLineSnapshot,
+  quotationDocument,
+} from "../documents/proforma.service.js";
 import * as M from "../../models.js";
 import {
   wrap,
@@ -32,6 +36,7 @@ export function mountSalesMaintenance(app, config) {
           );
           await releaseReservations(o.id, s);
           o.proformaHistory.push({
+            quotationDocument: o.quotationDocument,
             items: o.items,
             version: o.version,
             productSnapshot: o.productSnapshot,
@@ -58,13 +63,7 @@ export function mountSalesMaintenance(app, config) {
                 product: p.id,
                 quantity: row.quantity,
                 productCents: cents(row.productTotal),
-                snapshot: {
-                  name: p.name,
-                  grade: p.grade,
-                  origin: p.origin,
-                  packaging: p.packaging,
-                  unit: p.unit,
-                },
+                snapshot: quoteLineSnapshot(p, row),
               });
             }
             requireRule(
@@ -80,6 +79,18 @@ export function mountSalesMaintenance(app, config) {
             );
           else if (o.items?.length === 1)
             o.items[0].productCents = cents(req.body.productTotal);
+          if (req.body.quotationDetails) {
+            const details = {
+              ...(o.quotationDocument || {}),
+              ...req.body.quotationDetails,
+            };
+            o.quotationDocument = await quotationDocument(
+              await entity(M.Party, o.customer, s),
+              details,
+              s,
+              config,
+            );
+          }
           o.productCents = cents(req.body.productTotal);
           o.feesCents = req.body.deliveryFees
             ? cents(req.body.deliveryFees)
@@ -109,6 +120,8 @@ export function mountSalesMaintenance(app, config) {
       const customer = await entity(M.Party, o.customer);
       res.json({
         orderId: o.id,
+        quotationDocument: o.quotationDocument,
+        items: o.items,
         version: o.version,
         currency: "USD",
         customer: {

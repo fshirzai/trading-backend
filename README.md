@@ -143,3 +143,7 @@ This release implements the named features in `REQUIREMENTS.md`. It does not cla
 ## Multiple product images
 
 See PRODUCT_IMAGES_UPDATE.md. Products support eight persistent MongoDB-backed images, optimized thumbnails, galleries and staff management without enabling document uploads.
+
+## Version 2.6.1 document workflow
+
+See [UPGRADE_2.6.1.md](UPGRADE_2.6.1.md) for the grouped proforma editor, unsaved draft preview, in-app document viewer and shared print/download layout.

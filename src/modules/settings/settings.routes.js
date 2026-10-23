@@ -1,7 +1,7 @@
 import express from "express";
 import { randomUUID } from "node:crypto";
 import { SystemSettings, CompanyLogo, CompanyPhoto } from "./settings.model.js";
-import { publicSettings } from "./settings.service.js";
+import { publicSettings, adminSettings } from "./settings.service.js";
 import { normalizeProductImage } from "../catalog/product-images.service.js";
 import { wrap, roles, tx, audit } from "../../shared/services.js";
 import { requireRule, RuleError } from "../../shared/rules.js";
@@ -45,7 +45,7 @@ export function mountSettings(app) {
   app.get(
     "/api/admin/settings",
     admin(),
-    wrap(async (req, res) => res.json(await publicSettings())),
+    wrap(async (req, res) => res.json(await adminSettings())),
   );
   app.patch(
     "/api/admin/settings",
@@ -54,7 +54,7 @@ export function mountSettings(app) {
       res.json(
         await tx(async (s) => {
           const settings = await current(req.body.revision, s);
-          const before = await publicSettings(s);
+          const before = await adminSettings(s);
           const { revision, ...fields } = req.body;
           if (fields.aboutImages) {
             const existing = (await publicSettings(s)).aboutImages;
@@ -85,7 +85,7 @@ export function mountSettings(app) {
             after: fields,
             revision: settings.revision,
           });
-          return publicSettings(s);
+          return adminSettings(s);
         }),
       ),
     ),
@@ -126,7 +126,7 @@ export function mountSettings(app) {
           "company",
           { revision: settings.revision },
         );
-        return publicSettings(s);
+        return adminSettings(s);
       });
       res.status(201).json(out);
     }),
@@ -151,7 +151,7 @@ export function mountSettings(app) {
             "company",
             { revision: settings.revision },
           );
-          return publicSettings(s);
+          return adminSettings(s);
         }),
       ),
     ),

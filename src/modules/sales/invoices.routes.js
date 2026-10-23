@@ -1,6 +1,5 @@
-import { drawCompanyHeader } from "../settings/pdf-branding.service.js";
+import { commercialPdf } from "../documents/commercial-pdf.service.js";
 import { createHash, randomUUID } from "node:crypto";
-import PDFDocument from "pdfkit";
 import { Invoice } from "./invoices.model.js";
 import {
   wrap,
@@ -28,6 +27,8 @@ export function mountInvoices(app) {
           );
           const customer = await entity(Party, o.customer, s);
           const snapshot = {
+            quotationDocument: o.quotationDocument,
+            returnHours: o.returnHours,
             version: o.version,
             customer: {
               name: customer.name,
@@ -81,39 +82,20 @@ export function mountInvoices(app) {
     wrap(async (req, res) => {
       const i = await entity(Invoice, req.params.id);
       await ownOrder(req, String(i.order));
-      const snap = i.snapshot;
-      const pdf = new PDFDocument({ size: "A4", margin: 45 });
+      const bytes = await commercialPdf({
+        order: { ...i.snapshot, id: String(i.order), createdAt: i.createdAt },
+        customer: i.snapshot.customer,
+        type: "invoice",
+        invoice: i,
+        config: req.appConfig,
+      });
       res.set({
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${i.number}.pdf"`,
+        "Cache-Control": "private, no-store",
+        "X-Content-Type-Options": "nosniff",
       });
-      pdf.pipe(res);
-      await drawCompanyHeader(pdf, req.appConfig);
-      pdf.fontSize(16).text("Issued invoice");
-      pdf
-        .fontSize(10)
-        .moveDown()
-        .text(i.number)
-        .text("Issued: " + i.createdAt.toISOString())
-        .text("Customer: " + snap.customer.name)
-        .text("Order: " + i.order)
-        .text("Delivery: " + snap.border);
-      for (const line of snap.items)
-        pdf
-          .moveDown()
-          .text(
-            (line.snapshot?.name?.en || "Product") +
-              " - " +
-              line.quantity +
-              " " +
-              (line.snapshot?.unit || "units"),
-          )
-          .text("USD " + (line.productCents / 100).toFixed(2));
-      pdf
-        .moveDown()
-        .text("Delivery fees: USD " + (snap.feesCents / 100).toFixed(2))
-        .text("Total: USD " + (snap.totalCents / 100).toFixed(2));
-      pdf.end();
+      res.send(bytes);
     }),
   );
 }

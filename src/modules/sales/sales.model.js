@@ -44,10 +44,14 @@ export const Order = model("Order", {
         grade: String,
         origin: String,
         packaging: String,
+        bagCount: Number,
+        bagWeightKg: Number,
+        remarks: String,
         unit: String,
       },
     },
   ],
+  quotationDocument: Schema.Types.Mixed,
   productSnapshot: Schema.Types.Mixed,
   proformaHistory: [Schema.Types.Mixed],
   version: { type: Number, default: 1 },
@@ -61,3 +65,13 @@ Inquiry.schema.index({ customer: 1, _id: -1 });
 
 Order.schema.index({ createdAt: 1 });
 Order.schema.index({ customer: 1, createdAt: -1 });
+
+Order.schema.index(
+  { "quotationDocument.reference": 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      "quotationDocument.reference": { $type: "string" },
+    },
+  },
+);

@@ -1,3 +1,7 @@
+import {
+  quoteLineSnapshot,
+  quotationDocument,
+} from "../documents/proforma.service.js";
 import mongoose from "mongoose";
 import * as M from "../../models.js";
 import {
@@ -205,13 +209,7 @@ export function mountSalesOperations(app, config) {
             product: pr.id,
             quantity: row.quantity,
             productCents: cents(row.productTotal),
-            snapshot: {
-              name: pr.name,
-              grade: pr.grade,
-              origin: pr.origin,
-              packaging: pr.packaging,
-              unit: pr.unit,
-            },
+            snapshot: quoteLineSnapshot(pr, row),
           });
         }
         requireRule(
@@ -239,6 +237,12 @@ export function mountSalesOperations(app, config) {
           [
             {
               items,
+              quotationDocument: await quotationDocument(
+                await entity(M.Party, i.customer, s),
+                req.body.quotationDetails,
+                s,
+                config,
+              ),
               assignedTo: req.user.id,
               inquiry: i.id,
               customer: i.customer,
@@ -278,6 +282,12 @@ export function mountSalesOperations(app, config) {
         await tx(async (s) => {
           const o = await ownOrder(req, req.params.id, s);
           requireRule(!o.acceptedAt, "Proforma already accepted");
+          requireRule(
+            !o.quotationDocument?.validUntil ||
+              o.quotationDocument.validUntil >=
+                new Date().toISOString().slice(0, 10),
+            "Quotation expired; request a revised proforma",
+          );
           if (req.user.role !== "customer")
             requireRule(
               typeof req.body.acceptanceEvidence === "string" &&
@@ -286,6 +296,7 @@ export function mountSalesOperations(app, config) {
             );
           o.acceptedAt = new Date();
           o.acceptedSnapshot = {
+            quotationDocument: o.quotationDocument,
             items: orderItems(o).map((x) => (x.toObject ? x.toObject() : x)),
             acceptedBy: req.user.id,
             returnHours: o.returnHours,

@@ -201,3 +201,19 @@ The private URL `POST /api/webhooks/hesabpay/:account/:secret` verifies the prov
 
 - `GET /api/admin/demo-data`: admin only; returns enabled/seeded state and prior account/count summary. No passwords are returned.
 - `POST /api/admin/demo-data`: admin only, limited to five attempts per 15 minutes and disabled unless `DEMO_DATA_ENABLED=true`. Strict JSON body: `adminPassword`, `demoPassword` (12–128 characters), `confirmation: "ADD DEMO DATA"`. Reauthenticates the current administrator, then adds the one-time release-specific dataset transactionally. The existing admin account is retained. Existing demo-email/SKU collisions cause a conflict and rollback. Repeat calls return the original result. The audit stores counts, never passwords.
+
+## Version 2.6 proforma snapshots and packaging
+
+Quotation issue/revise accepts optional `quotationDetails` (reference, issueDate, validUntil, deliveryTerms, loadingPlace, transport, deliveryAddress, origin, instructions, notes, buyerContact, buyerRegistrationNo, buyerTaxNo, paymentInstructions). Each line accepts optional packaging, paired bagCount/bagWeightKg and remarks. Bag total must match quoted kg/tonne quantity. Reference is unique when supplied; dates are validated and expired dated quotes cannot be accepted.
+
+`PATCH /api/admin/settings` accepts `invoiceProfile`: registrationNo, taxNo, bankName, accountName, accountNumber, swiftCode, paymentInstructions, signatoryName, signatoryPosition. Existing company settings fields/revision are still required by that update contract. Administrator settings responses include this profile; public settings exclude it.
+
+New orders store `quotationDocument` with seller, buyer, bank, signature and trade-field snapshots. Accepted/revision/issued-invoice snapshots retain it. Existing authorized generated-document endpoints now return fully rendered, private no-store PDFs with matching tabular layouts and pagination. No card/stock/refund authorization rules are relaxed.
+
+## Version 2.6.1 — authenticated draft previews
+
+`POST /inquiries/:id/proforma/preview` accepts exactly the issue-proforma fields and returns an inline, private/no-store PDF marked UNSAVED DRAFT. Admin/manager/seller only; inquiry must still be New. It validates active products, MOQ, duplicate products, requested cart quantities, packaging weights, line totals and document dates. It does not create/update an order, inquiry, stock reservation or invoice.
+
+`POST /orders/:id/revise/preview` accepts exactly the revise-proforma fields (including reason), applies the payment/dispatch/closed-order guards and returns the same marked draft format without changing the version/history. Customers cannot call either draft endpoint. Saving still uses the existing transactional issue/revise routes.
+
+Existing `/orders/:id/documents/{proforma,invoice,packing-list}.pdf` and `/invoices/:id/pdf` remain the authorized source for screen viewing, printing and downloading. Issued invoice PDFs continue to use immutable invoice snapshots.

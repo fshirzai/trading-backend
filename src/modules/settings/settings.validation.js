@@ -1,3 +1,4 @@
+import { invoiceProfileSchema } from "../documents/proforma.validation.js";
 import { z } from "zod";
 import { strict } from "../../shared/validation.js";
 const clean = (max) => z.string().trim().max(max);
@@ -18,6 +19,7 @@ export const settingsSchemas = [
     "PATCH",
     /^\/api\/admin\/settings$/,
     strict({
+      invoiceProfile: invoiceProfileSchema.optional(),
       translations: z
         .object({
           ps: z

@@ -29,3 +29,12 @@ export async function publicSettings(session) {
     ].map((k) => [k, s[k] ?? (k === "revision" ? 0 : "")]),
   );
 }
+
+export async function adminSettings(session) {
+  const result = await publicSettings(session);
+  const stored = await SystemSettings.findById("company")
+    .select("invoiceProfile")
+    .session(session || null)
+    .lean();
+  return { ...result, invoiceProfile: stored?.invoiceProfile || {} };
+}

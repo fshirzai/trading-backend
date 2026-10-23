@@ -42,6 +42,7 @@ export const SystemSettings = model("SystemSettings", {
   address: { type: String, default: "" },
   workingHours: { type: String, default: "" },
   website: { type: String, default: "" },
+  invoiceProfile: { type: Schema.Types.Mixed, default: () => ({}) },
   logoVersion: String,
   revision: { type: Number, default: 0 },
   updatedBy: { type: Schema.Types.ObjectId, ref: "User" },

@@ -1,3 +1,7 @@
+import {
+  quotationDetailsSchema,
+  packagingFields,
+} from "../documents/proforma.validation.js";
 import { z } from "zod";
 import {
   text,
@@ -38,10 +42,18 @@ export const salesSchemas = [
     /^\/api\/inquiries\/[a-f\d]{24}\/proforma$/,
     strict({
       items: z
-        .array(strict({ product: oid, quantity: qty, productTotal: amount }))
+        .array(
+          strict({
+            product: oid,
+            quantity: qty,
+            productTotal: amount,
+            ...packagingFields,
+          }),
+        )
         .min(1)
         .max(30)
         .optional(),
+      quotationDetails: quotationDetailsSchema.optional(),
       productTotal: amount,
       deliveryFees: zeroAmount,
       border: text,
@@ -53,10 +65,18 @@ export const salesSchemas = [
     /^\/api\/orders\/[a-f\d]{24}\/revise$/,
     strict({
       items: z
-        .array(strict({ product: oid, quantity: qty, productTotal: amount }))
+        .array(
+          strict({
+            product: oid,
+            quantity: qty,
+            productTotal: amount,
+            ...packagingFields,
+          }),
+        )
         .min(1)
         .max(30)
         .optional(),
+      quotationDetails: quotationDetailsSchema.optional(),
       productTotal: amount,
       deliveryFees: zeroAmount,
       border: text,
@@ -70,3 +90,13 @@ export const salesSchemas = [
     strict({ acceptanceEvidence: note.optional() }),
   ],
 ];
+
+// Draft previews accept exactly the same validated fields as their save actions.
+salesSchemas.push(
+  [
+    "POST",
+    /^\/api\/inquiries\/[a-f\d]{24}\/proforma\/preview$/,
+    salesSchemas[1][2],
+  ],
+  ["POST", /^\/api\/orders\/[a-f\d]{24}\/revise\/preview$/, salesSchemas[2][2]],
+);
