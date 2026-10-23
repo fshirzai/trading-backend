@@ -1,15 +1,14 @@
 {
-  "release": "2.4.0",
+  "release": "2.5.0",
   "date": "2026-10-23",
   "tests": {
-    "backendFull": 94,
-    "backendContentFollowUp": 11,
-    "frontendUnit": 27,
-    "frontendUI": 21,
+    "backendFull": 97,
+    "backendAssetFollowUp": 3,
+    "frontendUnit": 29,
+    "frontendUI": 22,
     "frontendBackendIntegration": 1,
     "developmentEntry": 1,
-    "publicBrowserLayouts": 108,
-    "privateBrowserFlowsAndLayouts": 24
+    "browserChecks": 7
   },
   "failed": 0,
   "builds": [
@@ -17,6 +16,5 @@
     "static-export"
   ],
   "liveDeploymentVerified": false,
-  "liveHesabPaySettlementVerified": false,
-  "paymentProviderTests": "Controlled API stub; own merchant sandbox validation required"
+  "productionDatabaseModified": false
 }

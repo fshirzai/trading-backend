@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Trading Company Backend",
-    "version": "2.4.0",
+    "version": "2.5.0",
     "description": "Runtime Zod and domain checks add precision, role and ownership constraints. API.md describes GET, raw-file, webhook and response contracts."
   },
   "servers": [
@@ -4091,6 +4091,67 @@
           },
           "400": {
             "description": "Invalid callback, signature, amount or reference"
+          }
+        }
+      }
+    },
+    "/api/admin/demo-data": {
+      "get": {
+        "summary": "GET /api/admin/demo-data",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        }
+      },
+      "post": {
+        "summary": "POST /api/admin/demo-data",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "adminPassword": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "demoPassword": {
+                    "type": "string",
+                    "minLength": 12,
+                    "maxLength": 128
+                  },
+                  "confirmation": {
+                    "type": "string",
+                    "const": "ADD DEMO DATA"
+                  }
+                },
+                "required": [
+                  "adminPassword",
+                  "demoPassword",
+                  "confirmation"
+                ],
+                "additionalProperties": false
+              }
+            }
           }
         }
       }

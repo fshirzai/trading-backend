@@ -1,3 +1,4 @@
+import { mountDemoData } from "./modules/demo-data/demo-data.routes.js";
 import { mountProfile } from "./modules/profile/profile.routes.js";
 import {
   mountPublicSettings,
@@ -128,6 +129,7 @@ export async function createApp(config) {
   await mountAuth(app, config, authLimiter);
   mountProfile(app);
   mountSettings(app);
+  mountDemoData(app, config);
   mountCompanyPhotos(app);
   mountProductVideo(app);
   mountReceipts(app);

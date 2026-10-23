@@ -3,8 +3,10 @@ import { z } from "zod";
 import { schemas } from "../src/validation.js";
 const target = new URL("../openapi.json", import.meta.url);
 const doc = JSON.parse(await readFile(target, "utf8"));
-doc.info.version = "2.4.0";
+doc.info.version = "2.5.0";
 const extra = [
+  ["GET", "/api/admin/demo-data"],
+  ["POST", "/api/admin/demo-data"],
   ["PATCH", "/api/me/profile"],
   ["POST", "/api/me/avatar/remove"],
   ["POST", "/api/auth/sessions/{id}/revoke"],
@@ -160,4 +162,4 @@ doc.paths["/api/webhooks/hesabpay/{account}/{secret}"] = {
   },
 };
 await writeFile(target, JSON.stringify(doc, null, 2) + "\n");
-console.log("OpenAPI request contracts updated for 2.4.0");
+console.log("OpenAPI request contracts updated for 2.5.0");

@@ -85,6 +85,7 @@ export function readConfig(env = process.env) {
   )
     throw Error("DATA_ENCRYPTION_KEY must be a separate 32-byte base64 key");
   return {
+    demoDataEnabled: env.DEMO_DATA_ENABLED === "true",
     mode,
     emailBrandName,
     documentUploadsEnabled,

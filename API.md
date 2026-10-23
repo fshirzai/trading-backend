@@ -196,3 +196,8 @@ HesabPay configuration: admin-only `GET/PUT /api/admin/settings/hesabpay`. PUT a
 `POST /api/orders/:id/hesabpay-checkout` requires an idempotency key and `{amount,expectedAccount,expectedAfnMinor}`. `amount` is USD; the quoted AFN charge must match the server's merchant/rate snapshot. `GET /api/payment-methods` returns availability and non-secret conversion information.
 
 The private URL `POST /api/webhooks/hesabpay/:account/:secret` verifies the provider signature and matches the private merchant reference, transaction ID, item and amount. Duplicate transaction callbacks cannot post twice. Account credentials and the exchange-rate snapshot remain linked to the original attempt. Follow `UPGRADE_2.4.md` before enabling production.
+
+## Version 2.5 admin demonstration data
+
+- `GET /api/admin/demo-data`: admin only; returns enabled/seeded state and prior account/count summary. No passwords are returned.
+- `POST /api/admin/demo-data`: admin only, limited to five attempts per 15 minutes and disabled unless `DEMO_DATA_ENABLED=true`. Strict JSON body: `adminPassword`, `demoPassword` (12–128 characters), `confirmation: "ADD DEMO DATA"`. Reauthenticates the current administrator, then adds the one-time release-specific dataset transactionally. The existing admin account is retained. Existing demo-email/SKU collisions cause a conflict and rollback. Repeat calls return the original result. The audit stores counts, never passwords.

@@ -1,3 +1,4 @@
+import { demoDataSchemas } from "./modules/demo-data/demo-data.validation.js";
 import { hesabSchemas } from "./modules/payments/hesabpay.validation.js";
 import { profileSchemas } from "./modules/profile/profile.validation.js";
 import { settingsSchemas } from "./modules/settings/settings.validation.js";
@@ -20,6 +21,7 @@ import { documentsSchemas } from "./modules/documents/documents.validation.js";
 import { reconciliationSchemas } from "./modules/reconciliation/reconciliation.validation.js";
 import { notificationsSchemas } from "./modules/notifications/notifications.validation.js";
 export const schemas = [
+  ...demoDataSchemas,
   ...hesabSchemas,
   ...profileSchemas,
   ...settingsSchemas,

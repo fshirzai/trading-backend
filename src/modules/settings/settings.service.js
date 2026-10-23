@@ -5,6 +5,8 @@ export async function publicSettings(session) {
       .session(session || null)
       .lean()) || new SystemSettings().toObject();
   const s = { ...new SystemSettings().toObject(), ...stored };
+  if (s.tagline === "Good origins. Clear agreements. Connected trade.")
+    s.tagline = new SystemSettings().tagline;
   if (!s.aboutBody?.trim()) s.aboutBody = new SystemSettings().aboutBody;
   return Object.fromEntries(
     [
