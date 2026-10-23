@@ -1,21 +1,18 @@
-# Version 2.2 verification
+# Version 2.3 verification
 
-Verified locally on 23 October 2026 with Node.js 24.19.0.
+Verified locally on 23 October 2026. These results cover the packaged source, not the user's deployed Vercel configuration.
 
-| Check | Result |
-|---|---|
-| Backend suite | 83 passed, zero failed |
-| Backend syntax and formatting | Passed |
-| Frontend unit/contract/proxy suite | 22 passed |
-| Frontend DOM/UI suite | 11 passed |
-| Full-stack API/proxy integration | 1 passed |
-| Development CLI system test | 1 passed |
-| Standard production build | Passed |
-| Vercel rewrite production build | Passed |
-| Dependency audits | Zero reported vulnerabilities in both audits |
+- Backend JavaScript syntax checks passed.
+- Backend Prettier format check passed.
+- Backend full regression suite: **89 passed, 0 failed**. Full output: `verification-2.3/backend-final.log`.
+- New feature integration suite: 6 passed. Covers settings whitelist, admin authorization, revision conflicts, unsafe websites, raw image validation and normalization, PDF logo rendering, all-role profile editing, private image ownership, replacement/removal, safe session metadata/revocation, and protected inactive video previews/range responses.
+- Frontend unit suite: 22 passed.
+- Frontend React DOM interaction suite: 15 passed, including administrator-only settings, saving company/profile fields, and completing a chunked product video upload.
+- Real frontend API client against seeded backend HTTP server: 1 passed.
+- Development server and same-origin API proxy test: 1 passed.
+- Next.js 16.4.2 production build passed in Vercel mode with public HTTPS backend origin.
+- Local production build passed.
 
-Backend additions cover warehouse totals, reservation concurrency, shortages and linked receipts, multiple order products, split handovers, exact refund and returned batch linkage, video chunks/ranges and permissions, queued notifications, snapshot backup/isolated restore with checksum tampering, repeatable migration, immutable invoice history. Existing role, auth, payment, ledger, return-window and transaction regression tests remain included.
+No dependencies were added. Backend and frontend versions are 2.3.0. Secrets and node_modules are excluded from the source ZIP.
 
-These results do not certify live hosting, actual SMTP credentials, real bank funds, provider checkout, browser codec support or production load. The video fixture tests byte transport and signatures, not browser decoding. Backups were restored against disposable local replica-set databases; no production data was accessed.
-
-Read UPGRADE_2.2.md (or the root UPGRADE_GUIDE.md) for deployment, migration and operational limits.
+The browser UI was tested through React DOM interactions, not a manual end-to-end browser walkthrough. External SMTP delivery, actual deployed Vercel requests, and video codec playback still depend on the deployment and user-supplied media. Existing 2.2 verification documents remain historical records.

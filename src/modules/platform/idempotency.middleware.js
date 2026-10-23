@@ -21,6 +21,9 @@ const required =
 export function idempotencyMiddleware(req, res, next) {
   if (
     req.method !== "POST" ||
+    ["/api/me/avatar", "/api/admin/settings/logo"].includes(
+      req.originalUrl.split("?")[0],
+    ) ||
     /\/(receipts|chunks)$/.test(req.originalUrl.split("?")[0]) ||
     /^\/api\/products\/[a-f\d]{24}\/images(?:\/|$)/.test(req.originalUrl) ||
     /\/(checkout|card-refunds)$/.test(req.originalUrl) ||

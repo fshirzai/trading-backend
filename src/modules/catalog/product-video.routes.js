@@ -4,67 +4,86 @@ import { Product, ProductVideo, ProductVideoChunk } from "../../models.js";
 import { wrap, roles, entity, tx, audit } from "../../shared/services.js";
 import { requireRule, RuleError } from "../../shared/rules.js";
 const staff = () => roles("admin", "manager", "procurement");
+async function sendVideo(req, res, publicOnly) {
+  const p = await Product.findOne({
+    _id: req.params.id,
+    ...(publicOnly ? { active: true } : {}),
+  }).lean();
+  if (!p?.video) throw new RuleError("Video not found", 404);
+  const v = await ProductVideo.findOne({
+    _id: p.video,
+    state: "Ready",
+  }).lean();
+  if (!v) throw new RuleError("Video not found", 404);
+  let start = 0,
+    end = v.size - 1;
+  if (req.headers.range) {
+    const m = /^bytes=(\d+)-(\d*)$/.exec(req.headers.range);
+    if (!m || +m[1] >= v.size) {
+      res.setHeader("Content-Range", `bytes */${v.size}`);
+      return res.status(416).end();
+    }
+    start = +m[1];
+    end = Math.min(m[2] ? +m[2] : end, end, start + 1024 * 1024 - 1);
+    if (end < start) return res.status(416).end();
+    res.status(206);
+    res.setHeader("Content-Range", `bytes ${start}-${end}/${v.size}`);
+  }
+  res.set({
+    "Content-Type": v.mime,
+    "Content-Length": String(end - start + 1),
+    "Accept-Ranges": "bytes",
+    "X-Content-Type-Options": "nosniff",
+    "Cache-Control": publicOnly ? "public, max-age=300" : "private, no-store",
+    "Content-Disposition": "inline",
+  });
+  const first = Math.floor(start / (1024 * 1024)),
+    last = Math.floor(end / (1024 * 1024));
+  for (let i = first; i <= last; i++) {
+    if (res.destroyed) break;
+    const part = await ProductVideoChunk.findOne({
+      video: v._id,
+      ordinal: i,
+    })
+      .select("+data")
+      .lean();
+    if (!part) {
+      res.destroy();
+      break;
+    }
+    const data = Buffer.from(part.data.buffer || part.data);
+    const from = i === first ? start % (1024 * 1024) : 0;
+    const to = i === last ? (end % (1024 * 1024)) + 1 : data.length;
+    if (!res.write(data.subarray(from, to)))
+      await Promise.race([once(res, "drain"), once(res, "close")]);
+  }
+  res.end();
+}
 export function mountPublicVideo(app) {
   app.get(
     "/api/catalog/:id/video",
-    wrap(async (req, res) => {
-      const p = await Product.findOne({
-        _id: req.params.id,
-        active: true,
-      }).lean();
-      if (!p?.video) throw new RuleError("Video not found", 404);
-      const v = await ProductVideo.findOne({
-        _id: p.video,
-        state: "Ready",
-      }).lean();
-      if (!v) throw new RuleError("Video not found", 404);
-      let start = 0,
-        end = v.size - 1;
-      if (req.headers.range) {
-        const m = /^bytes=(\d+)-(\d*)$/.exec(req.headers.range);
-        if (!m || +m[1] >= v.size) {
-          res.setHeader("Content-Range", `bytes */${v.size}`);
-          return res.status(416).end();
-        }
-        start = +m[1];
-        end = Math.min(m[2] ? +m[2] : end, end, start + 1024 * 1024 - 1);
-        if (end < start) return res.status(416).end();
-        res.status(206);
-        res.setHeader("Content-Range", `bytes ${start}-${end}/${v.size}`);
-      }
-      res.set({
-        "Content-Type": v.mime,
-        "Content-Length": String(end - start + 1),
-        "Accept-Ranges": "bytes",
-        "X-Content-Type-Options": "nosniff",
-        "Cache-Control": "public, max-age=300",
-        "Content-Disposition": "inline",
-      });
-      const first = Math.floor(start / (1024 * 1024)),
-        last = Math.floor(end / (1024 * 1024));
-      for (let i = first; i <= last; i++) {
-        if (res.destroyed) break;
-        const part = await ProductVideoChunk.findOne({
-          video: v._id,
-          ordinal: i,
-        })
-          .select("+data")
-          .lean();
-        if (!part) {
-          res.destroy();
-          break;
-        }
-        const data = Buffer.from(part.data.buffer || part.data);
-        const from = i === first ? start % (1024 * 1024) : 0;
-        const to = i === last ? (end % (1024 * 1024)) + 1 : data.length;
-        if (!res.write(data.subarray(from, to)))
-          await Promise.race([once(res, "drain"), once(res, "close")]);
-      }
-      res.end();
-    }),
+    wrap((req, res) => sendVideo(req, res, true)),
   );
 }
 export function mountProductVideo(app) {
+  const viewers = () => roles("admin", "manager", "seller", "procurement");
+  app.get(
+    "/api/products/:id/video",
+    viewers(),
+    wrap((req, res) => sendVideo(req, res, false)),
+  );
+  app.get(
+    "/api/products/:id/video-info",
+    viewers(),
+    wrap(async (req, res) => {
+      const p = await entity(Product, req.params.id);
+      if (!p.video) throw new RuleError("Video not found", 404);
+      const v = await entity(ProductVideo, p.video);
+      requireRule(v.state === "Ready", "Video not ready");
+      res.json({ size: v.size, mime: v.mime, id: v.id });
+    }),
+  );
+
   app.post(
     "/api/products/:id/video",
     staff(),

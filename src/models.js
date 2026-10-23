@@ -17,3 +17,6 @@ export * from "./modules/reconciliation/reconciliation.model.js";
 export * from "./modules/notifications/notifications.model.js";
 
 export { Invoice } from "./modules/sales/invoices.model.js";
+
+export * from "./modules/settings/settings.model.js";
+export * from "./modules/profile/profile.model.js";

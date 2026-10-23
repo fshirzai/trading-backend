@@ -1,3 +1,4 @@
+import { drawCompanyHeader } from "../settings/pdf-branding.service.js";
 import { orderItems } from "../inventory/reservations.service.js";
 import PDFDocument from "pdfkit";
 import { wrap, ownOrder, entity, roles } from "../../shared/services.js";
@@ -24,7 +25,7 @@ export function mountGeneratedDocuments(app, config) {
         `attachment; filename="${req.params.type}-${o.id}.pdf"`,
       );
       pdf.pipe(res);
-      pdf.fontSize(24).text("Trading Company");
+      await drawCompanyHeader(pdf, config);
       pdf.fontSize(16).text(req.params.type.toUpperCase());
       pdf
         .moveDown()

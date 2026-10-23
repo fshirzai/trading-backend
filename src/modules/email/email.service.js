@@ -1,3 +1,4 @@
+import { SystemSettings } from "../settings/settings.model.js";
 import nodemailer from "nodemailer";
 import { randomBytes } from "node:crypto";
 import { EmailToken, EmailJob } from "./email.model.js";
@@ -55,13 +56,17 @@ export async function queueToken(user, kind, config, session) {
     config.frontendUrl,
   );
   url.searchParams.set("token", token);
+  const branding = await SystemSettings.findById("company")
+    .select("name")
+    .session(session || null)
+    .lean();
   const payload = {
     to: user.email,
     ...accountEmail({
       kind,
       name: user.name,
       actionUrl: url.href,
-      brandName: config.emailBrandName,
+      brandName: branding?.name || config.emailBrandName,
     }),
   };
   await EmailJob.create(

@@ -1,3 +1,5 @@
+import { profileSchemas } from "./modules/profile/profile.validation.js";
+import { settingsSchemas } from "./modules/settings/settings.validation.js";
 import { upgradeSchemas } from "./modules/platform/upgrade.validation.js";
 import { catalogSchemas } from "./modules/catalog/catalog.validation.js";
 import { contactsSchemas } from "./modules/contacts/contacts.validation.js";
@@ -17,6 +19,8 @@ import { documentsSchemas } from "./modules/documents/documents.validation.js";
 import { reconciliationSchemas } from "./modules/reconciliation/reconciliation.validation.js";
 import { notificationsSchemas } from "./modules/notifications/notifications.validation.js";
 export const schemas = [
+  ...profileSchemas,
+  ...settingsSchemas,
   ...upgradeSchemas,
   ...notificationsSchemas,
   ...reconciliationSchemas,
@@ -63,6 +67,11 @@ export function validateRequest(req, res, next) {
     if (!query.safeParse(req.query).success)
       throw new RuleError("Invalid query parameters", 400);
     if (["POST", "PATCH", "PUT"].includes(req.method)) {
+      if (
+        req.method === "POST" &&
+        ["/api/me/avatar", "/api/admin/settings/logo"].includes(req.path)
+      )
+        return next();
       if (
         req.method === "POST" &&
         /^\/api\/products\/[a-f\d]{24}\/images(?:\/[a-f\d]{24}\/replace)?$/.test(

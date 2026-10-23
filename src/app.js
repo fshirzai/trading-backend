@@ -1,3 +1,8 @@
+import { mountProfile } from "./modules/profile/profile.routes.js";
+import {
+  mountPublicSettings,
+  mountSettings,
+} from "./modules/settings/settings.routes.js";
 import {
   mountPublicVideo,
   mountProductVideo,
@@ -68,6 +73,7 @@ export async function createApp(config) {
       allowedHeaders: [
         "X-Product-Version",
         "X-Video-Chunk",
+        "X-Settings-Revision",
         "Content-Type",
         "Authorization",
         "X-Document-Name",
@@ -112,10 +118,13 @@ export async function createApp(config) {
     store: new MongoRateStore("auth"),
     message: { error: "Too many authentication attempts" },
   });
+  mountPublicSettings(app);
   mountPublicProductImages(app);
   mountPublicVideo(app);
   mountWorkerPublic(app, config);
   await mountAuth(app, config, authLimiter);
+  mountProfile(app);
+  mountSettings(app);
   mountProductVideo(app);
   mountReceipts(app);
   mountNotificationDelivery(app);

@@ -21,6 +21,7 @@ const hash = (x) => createHash("sha256").update(x).digest("hex");
 const publicUser = (u) => ({
   id: u.id || String(u._id),
   name: u.name,
+  avatarVersion: u.avatarVersion || "",
   email: u.email,
   role: u.role,
   emailVerified: u.emailVerified,
@@ -97,6 +98,7 @@ export function authMiddleware(config) {
       id: String(user._id),
       role: user.role,
       name: user.name,
+      avatarVersion: user.avatarVersion || "",
       email: user.email,
       emailVerified: user.emailVerified,
       mfaEnabled: user.mfaEnabled,
@@ -125,6 +127,7 @@ export async function mountAuth(app, config, authLimiter) {
               email: req.body.email,
               passwordHash: hash,
               role: "customer",
+              country: req.body.country,
               verificationSentAt: new Date(),
             },
           ],
@@ -185,7 +188,10 @@ export async function mountAuth(app, config, authLimiter) {
         });
       await User.updateOne(
         { _id: u.id },
-        { $set: { loginFailures: 0 }, $unset: { lockedUntil: 1 } },
+        {
+          $set: { loginFailures: 0, lastLoginAt: new Date() },
+          $unset: { lockedUntil: 1 },
+        },
       );
       const token = randomBytes(32).toString("hex");
       const session = await Session.create({

@@ -1,3 +1,4 @@
+import { drawCompanyHeader } from "../settings/pdf-branding.service.js";
 import { createHash, randomUUID } from "node:crypto";
 import PDFDocument from "pdfkit";
 import { Invoice } from "./invoices.model.js";
@@ -87,7 +88,8 @@ export function mountInvoices(app) {
         "Content-Disposition": `attachment; filename="${i.number}.pdf"`,
       });
       pdf.pipe(res);
-      pdf.fontSize(20).text("Trading Company - Issued invoice");
+      await drawCompanyHeader(pdf, req.appConfig);
+      pdf.fontSize(16).text("Issued invoice");
       pdf
         .fontSize(10)
         .moveDown()

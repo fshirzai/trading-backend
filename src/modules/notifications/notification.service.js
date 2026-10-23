@@ -10,6 +10,10 @@ const escape = (s) =>
   );
 export async function notifyEvent(req, s, action, entity, value, details = {}) {
   const config = req.appConfig;
+  const company = await M.SystemSettings.findById("company")
+    .select("name")
+    .session(s)
+    .lean();
   if (!config) return;
   let order, party, linked;
   if (entity === "Order") order = await M.Order.findById(value).session(s);
@@ -88,9 +92,9 @@ export async function notifyEvent(req, s, action, entity, value, details = {}) {
         : "";
     const payload = {
       to: user.email,
-      subject: `${config.emailBrandName || "Trading Company"} - ${title}`,
+      subject: `${company?.name || config.emailBrandName || "Trading Company"} - ${title}`,
       text: `${body}\n${url}`,
-      html: `<div style="background:#edf2f7;padding:32px;font-family:Arial,sans-serif"><div style="max-width:600px;margin:auto;background:white;padding:32px;border-radius:12px"><h2 style="color:#15334f">${escape(config.emailBrandName || "Trading Company")}</h2><h3>${escape(title)}</h3><p>${escape(body)}</p>${summary}<a style="display:inline-block;background:#0d766e;color:white;padding:14px 22px;text-decoration:none;border-radius:6px" href="${escape(url)}">Open dashboard</a><p style="color:#607080;font-size:12px">Sign in to view protected records. This message does not confirm unverified bank funds.</p></div></div>`,
+      html: `<div style="background:#edf2f7;padding:32px;font-family:Arial,sans-serif"><div style="max-width:600px;margin:auto;background:white;padding:32px;border-radius:12px"><h2 style="color:#15334f">${escape(company?.name || config.emailBrandName || "Trading Company")}</h2><h3>${escape(title)}</h3><p>${escape(body)}</p>${summary}<a style="display:inline-block;background:#0d766e;color:white;padding:14px 22px;text-decoration:none;border-radius:6px" href="${escape(url)}">Open dashboard</a><p style="color:#607080;font-size:12px">Sign in to view protected records. This message does not confirm unverified bank funds.</p></div></div>`,
     };
     await M.EmailJob.create(
       [

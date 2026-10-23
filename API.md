@@ -172,3 +172,13 @@ MFA is optional for all roles. Enrolled MFA remains enforced at sign-in; disabli
 - POST `/jobs/notifications`: external scheduler, authenticated by NOTIFICATION_WORKER_KEY Bearer secret; processes bounded queued work without a user session.
 
 List query additions: bounded `search`, `status`, `from`, `to`, and product/order/warehouse where the model supports them. Filters are combined with server-derived ownership and never replace it. Domain rules and role authorization remain authoritative. Product units: tonne, kg, piece, box, bag; SKU is unique when supplied.
+
+## Profile and company settings (2.3)
+
+`GET /api/settings/public` returns only public company content. `GET /api/settings/logo/:version` serves the public normalized logo.
+
+All users can use `GET/PATCH /api/me/profile`, `POST /api/me/avatar`, `GET /api/me/avatar/:version`, `POST /api/me/avatar/remove`, `GET /api/auth/sessions`, and `POST /api/auth/sessions/:id/revoke`. Avatar reads always resolve to the authenticated user's own photo.
+
+Only admins can use `GET/PATCH /api/admin/settings`, `POST /api/admin/settings/logo`, and `POST /api/admin/settings/logo/remove`. PATCH takes the complete company form plus numeric `revision`. Logo upload takes raw JPEG/PNG/WebP with `X-Settings-Revision`; removal takes `{revision}`. Stale revisions return 409.
+
+Staff video preview: `GET /api/products/:id/video-info` and `GET /api/products/:id/video`, supporting byte ranges. Public active-product playback remains `GET /api/catalog/:id/video`.
