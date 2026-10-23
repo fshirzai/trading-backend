@@ -63,6 +63,7 @@ export function mountGatewayWebhook(app, config) {
               order: o.id,
               amountCents: attempt.amountCents,
               method: "VISA",
+              provider: "stripe",
               reference: String(obj.payment_intent),
               status: "Verified",
               verifiedAt: new Date(),

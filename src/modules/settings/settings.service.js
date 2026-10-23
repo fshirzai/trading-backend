@@ -1,9 +1,11 @@
 import { SystemSettings } from "./settings.model.js";
 export async function publicSettings(session) {
-  const s =
+  const stored =
     (await SystemSettings.findById("company")
       .session(session || null)
       .lean()) || new SystemSettings().toObject();
+  const s = { ...new SystemSettings().toObject(), ...stored };
+  if (!s.aboutBody?.trim()) s.aboutBody = new SystemSettings().aboutBody;
   return Object.fromEntries(
     [
       "name",
@@ -17,6 +19,11 @@ export async function publicSettings(session) {
       "website",
       "logoVersion",
       "revision",
+      "aboutImages",
+      "translations",
+      "termsBody",
+      "privacyBody",
+      "deliveryBody",
     ].map((k) => [k, s[k] ?? (k === "revision" ? 0 : "")]),
   );
 }

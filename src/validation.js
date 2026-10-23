@@ -1,3 +1,4 @@
+import { hesabSchemas } from "./modules/payments/hesabpay.validation.js";
 import { profileSchemas } from "./modules/profile/profile.validation.js";
 import { settingsSchemas } from "./modules/settings/settings.validation.js";
 import { upgradeSchemas } from "./modules/platform/upgrade.validation.js";
@@ -19,6 +20,7 @@ import { documentsSchemas } from "./modules/documents/documents.validation.js";
 import { reconciliationSchemas } from "./modules/reconciliation/reconciliation.validation.js";
 import { notificationsSchemas } from "./modules/notifications/notifications.validation.js";
 export const schemas = [
+  ...hesabSchemas,
   ...profileSchemas,
   ...settingsSchemas,
   ...upgradeSchemas,
@@ -39,6 +41,9 @@ export const schemas = [
 ];
 
 const querySchema = strict({
+  category: z.string().trim().max(100).optional(),
+  origin: z.string().trim().max(100).optional(),
+  grade: z.string().trim().max(100).optional(),
   search: z.string().trim().max(100).optional(),
   status: z.string().max(60).optional(),
   warehouse: oid.optional(),
@@ -69,7 +74,11 @@ export function validateRequest(req, res, next) {
     if (["POST", "PATCH", "PUT"].includes(req.method)) {
       if (
         req.method === "POST" &&
-        ["/api/me/avatar", "/api/admin/settings/logo"].includes(req.path)
+        [
+          "/api/me/avatar",
+          "/api/admin/settings/logo",
+          "/api/admin/settings/photos",
+        ].includes(req.path)
       )
         return next();
       if (

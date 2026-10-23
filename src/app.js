@@ -15,6 +15,15 @@ import {
 import { mountWorkspace } from "./modules/workspace/workspace.routes.js";
 import express from "express";
 import {
+  mountHesab,
+  mountHesabPublic,
+} from "./modules/payments/hesabpay.routes.js";
+import {
+  mountPublicCompanyPhotos,
+  mountCompanyPhotos,
+} from "./modules/settings/photos.routes.js";
+import { mountPublicCatalog } from "./modules/catalog/catalog.public.js";
+import {
   mountPublicProductImages,
   mountProductImages,
 } from "./modules/catalog/product-images.routes.js";
@@ -93,6 +102,7 @@ export async function createApp(config) {
     }),
   );
   mountGatewayWebhook(app, config);
+  mountHesabPublic(app, config);
   app.use(express.json({ limit: "100kb", strict: true }));
   app.use(validateRequest);
   app.get("/api/health/live", (req, res) => res.json({ status: "ok" }));
@@ -101,15 +111,7 @@ export async function createApp(config) {
       ? res.json({ status: "ready" })
       : res.status(503).json({ status: "unavailable" }),
   );
-  app.get("/api/catalog", async (req, res, next) => {
-    try {
-      const { Product } = await import("./models.js");
-      const { list } = await import("./shared/services.js");
-      res.json(await list(Product, { active: true }, req.query));
-    } catch (e) {
-      next(e);
-    }
-  });
+  mountPublicCatalog(app);
   const authLimiter = rateLimit({
     windowMs: 15 * 60000,
     limit: 20,
@@ -119,12 +121,14 @@ export async function createApp(config) {
     message: { error: "Too many authentication attempts" },
   });
   mountPublicSettings(app);
+  mountPublicCompanyPhotos(app);
   mountPublicProductImages(app);
   mountPublicVideo(app);
   mountWorkerPublic(app, config);
   await mountAuth(app, config, authLimiter);
   mountProfile(app);
   mountSettings(app);
+  mountCompanyPhotos(app);
   mountProductVideo(app);
   mountReceipts(app);
   mountNotificationDelivery(app);
@@ -140,6 +144,7 @@ export async function createApp(config) {
   mountGeneratedDocuments(app, config);
   mountReconciliation(app, config);
   mountGatewayRoutes(app, config);
+  mountHesab(app, config);
   mountCardRefunds(app, config);
   app.use((req, res, next) => next(new RuleError("Endpoint not found", 404)));
   app.use((err, req, res, next) => {

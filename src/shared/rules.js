@@ -4,8 +4,8 @@ export class RuleError extends Error {
     this.status = status;
   }
 }
-export const requireRule = (condition, message) => {
-  if (!condition) throw new RuleError(message);
+export const requireRule = (condition, message, status = 422) => {
+  if (!condition) throw new RuleError(message, status);
 };
 export function cents(value) {
   requireRule(

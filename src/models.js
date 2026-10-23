@@ -20,3 +20,6 @@ export { Invoice } from "./modules/sales/invoices.model.js";
 
 export * from "./modules/settings/settings.model.js";
 export * from "./modules/profile/profile.model.js";
+
+export { CompanyPhoto } from "./modules/settings/settings.model.js";
+export * from "./modules/payments/hesabpay.model.js";

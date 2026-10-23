@@ -21,12 +21,14 @@ const required =
 export function idempotencyMiddleware(req, res, next) {
   if (
     req.method !== "POST" ||
-    ["/api/me/avatar", "/api/admin/settings/logo"].includes(
-      req.originalUrl.split("?")[0],
-    ) ||
+    [
+      "/api/me/avatar",
+      "/api/admin/settings/logo",
+      "/api/admin/settings/photos",
+    ].includes(req.originalUrl.split("?")[0]) ||
     /\/(receipts|chunks)$/.test(req.originalUrl.split("?")[0]) ||
     /^\/api\/products\/[a-f\d]{24}\/images(?:\/|$)/.test(req.originalUrl) ||
-    /\/(checkout|card-refunds)$/.test(req.originalUrl) ||
+    /\/(checkout|hesabpay-checkout|card-refunds)$/.test(req.originalUrl) ||
     req.originalUrl.startsWith("/api/auth/") ||
     req.originalUrl === "/api/users" ||
     req.originalUrl.startsWith("/api/documents/") ||

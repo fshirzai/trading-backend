@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Trading Company Backend",
-    "version": "2.2.0",
+    "version": "2.4.0",
     "description": "Runtime Zod and domain checks add precision, role and ownership constraints. API.md describes GET, raw-file, webhook and response contracts."
   },
   "servers": [
@@ -33,6 +33,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
@@ -54,8 +55,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -74,6 +74,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -139,6 +140,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "journal": {
@@ -168,8 +170,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -188,6 +189,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
@@ -209,8 +211,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -225,6 +226,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "token": {
@@ -259,6 +261,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "email": {
@@ -295,6 +298,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "email": {
@@ -331,6 +335,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "token": {
@@ -375,6 +380,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "password": {
@@ -414,6 +420,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "code": {
@@ -452,6 +459,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "password": {
@@ -493,6 +501,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -546,6 +555,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "email": {
@@ -592,6 +602,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
@@ -618,6 +629,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
@@ -644,6 +656,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
@@ -674,6 +687,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -735,6 +749,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "active": {
@@ -769,8 +784,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -789,6 +803,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "oldPassword": {
@@ -839,6 +854,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -916,8 +932,7 @@
                   }
                 },
                 "required": [
-                  "name",
-                  "moq"
+                  "name"
                 ],
                 "additionalProperties": false
               }
@@ -947,6 +962,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -1044,8 +1060,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1064,6 +1079,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -1132,6 +1148,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "customer": {
@@ -1152,6 +1169,38 @@
                     "minLength": 1,
                     "maxLength": 200
                   },
+                  "items": {
+                    "minItems": 1,
+                    "maxItems": 30,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "product": {
+                          "type": "string",
+                          "pattern": "^[a-f\\d]{24}$"
+                        },
+                        "quantity": {
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 1000000
+                        }
+                      },
+                      "required": [
+                        "product",
+                        "quantity"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "preferredPayment": {
+                    "default": "TT",
+                    "type": "string",
+                    "enum": [
+                      "TT",
+                      "VISA"
+                    ]
+                  },
                   "source": {
                     "default": "website",
                     "type": "string",
@@ -1165,8 +1214,7 @@
                 },
                 "required": [
                   "product",
-                  "quantity",
-                  "source"
+                  "quantity"
                 ],
                 "additionalProperties": false
               }
@@ -1196,6 +1244,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "items": {
@@ -1259,9 +1308,7 @@
                 },
                 "required": [
                   "productTotal",
-                  "deliveryFees",
-                  "border",
-                  "splitIncluded"
+                  "border"
                 ],
                 "additionalProperties": false
               }
@@ -1282,8 +1329,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1302,6 +1348,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "items": {
@@ -1370,9 +1417,7 @@
                 },
                 "required": [
                   "productTotal",
-                  "deliveryFees",
                   "border",
-                  "splitIncluded",
                   "reason"
                 ],
                 "additionalProperties": false
@@ -1394,8 +1439,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1414,6 +1458,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "acceptanceEvidence": {
@@ -1441,8 +1486,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1461,6 +1505,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "reason": {
@@ -1491,8 +1536,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1511,6 +1555,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "reason": {
@@ -1541,8 +1586,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1561,6 +1605,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "inspectionPassed": {
@@ -1601,7 +1646,6 @@
                 "required": [
                   "inspectionPassed",
                   "refundConfirmed",
-                  "returnedQuantity",
                   "note"
                 ],
                 "additionalProperties": false
@@ -1623,8 +1667,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1643,6 +1686,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "payment": {
@@ -1682,8 +1726,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1702,6 +1745,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "amount": {
@@ -1732,8 +1776,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1752,6 +1795,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "amount": {
@@ -1797,8 +1841,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1817,6 +1860,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "bankFundsConfirmed": {
@@ -1845,8 +1889,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1865,6 +1908,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "supplier": {
@@ -1924,6 +1968,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "warehouse": {
@@ -1964,8 +2009,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -1984,6 +2028,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "amount": {
@@ -2020,8 +2065,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -2040,6 +2084,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "batch": {
@@ -2089,6 +2134,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -2138,6 +2184,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -2178,8 +2225,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -2198,6 +2244,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "item": {
@@ -2268,11 +2315,8 @@
                 },
                 "required": [
                   "quantity",
-                  "direct",
                   "driver",
-                  "vehicle",
-                  "additionalFee",
-                  "feeAccepted"
+                  "vehicle"
                 ],
                 "additionalProperties": false
               }
@@ -2293,8 +2337,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -2313,6 +2356,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "recipient": {
@@ -2349,8 +2393,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -2369,6 +2412,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "memo": {
@@ -2440,6 +2484,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
@@ -2461,8 +2506,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -2481,6 +2525,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "month": {
@@ -2519,6 +2564,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "code": {
@@ -2574,6 +2620,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "amount": {
@@ -2635,6 +2682,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "year": {
@@ -2674,6 +2722,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "amount": {
@@ -2704,8 +2753,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -2724,6 +2772,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "month": {
@@ -2746,8 +2795,7 @@
                   }
                 },
                 "required": [
-                  "month",
-                  "deduction"
+                  "month"
                 ],
                 "additionalProperties": false
               }
@@ -2768,8 +2816,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -2788,6 +2835,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -2838,6 +2886,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "name": {
@@ -2878,8 +2927,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -2898,6 +2946,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
@@ -2919,8 +2968,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$"
+              "type": "string"
             }
           }
         ]
@@ -2941,13 +2989,24 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
     "/api/orders/{id}/procurement-requests": {
@@ -2965,6 +3024,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {
                   "item": {
@@ -2981,7 +3041,17 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
     "/api/notification-delivery/{id}/retry": {
@@ -2999,13 +3069,24 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
     "/api/orders/{id}/invoices": {
@@ -3023,11 +3104,993 @@
           "content": {
             "application/json": {
               "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
                 "type": "object",
                 "properties": {},
                 "additionalProperties": false
               }
             }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/me/profile": {
+      "patch": {
+        "summary": "PATCH /api/me/profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "phone": {
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "country": {
+                    "type": "string",
+                    "maxLength": 120
+                  },
+                  "address": {
+                    "type": "string",
+                    "maxLength": 1000
+                  }
+                },
+                "required": [
+                  "name",
+                  "phone",
+                  "country",
+                  "address"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "GET /api/me/profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        }
+      }
+    },
+    "/api/me/avatar/remove": {
+      "post": {
+        "summary": "POST /api/me/avatar/remove",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {},
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/sessions/{id}/revoke": {
+      "post": {
+        "summary": "POST /api/auth/sessions/{id}/revoke",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {},
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/settings": {
+      "patch": {
+        "summary": "PATCH /api/admin/settings",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "translations": {
+                    "type": "object",
+                    "properties": {
+                      "ps": {
+                        "type": "object",
+                        "properties": {
+                          "aboutTitle": {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          "aboutBody": {
+                            "type": "string",
+                            "maxLength": 12000
+                          },
+                          "termsBody": {
+                            "type": "string",
+                            "maxLength": 12000
+                          },
+                          "privacyBody": {
+                            "type": "string",
+                            "maxLength": 12000
+                          },
+                          "deliveryBody": {
+                            "type": "string",
+                            "maxLength": 12000
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "fa": {
+                        "type": "object",
+                        "properties": {
+                          "aboutTitle": {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          "aboutBody": {
+                            "type": "string",
+                            "maxLength": 12000
+                          },
+                          "termsBody": {
+                            "type": "string",
+                            "maxLength": 12000
+                          },
+                          "privacyBody": {
+                            "type": "string",
+                            "maxLength": 12000
+                          },
+                          "deliveryBody": {
+                            "type": "string",
+                            "maxLength": 12000
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "ps",
+                      "fa"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "termsBody": {
+                    "type": "string",
+                    "maxLength": 12000
+                  },
+                  "privacyBody": {
+                    "type": "string",
+                    "maxLength": 12000
+                  },
+                  "deliveryBody": {
+                    "type": "string",
+                    "maxLength": 12000
+                  },
+                  "aboutImages": {
+                    "maxItems": 4,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(?:starter-(?:field|grain)|[a-f\\d]{24})$"
+                        },
+                        "alt": {
+                          "type": "string",
+                          "maxLength": 200
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "alt"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "tagline": {
+                    "type": "string",
+                    "maxLength": 240
+                  },
+                  "aboutTitle": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "aboutBody": {
+                    "type": "string",
+                    "maxLength": 12000
+                  },
+                  "contactEmail": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "const": ""
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 254,
+                        "format": "email",
+                        "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                      }
+                    ]
+                  },
+                  "contactPhone": {
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "address": {
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "workingHours": {
+                    "type": "string",
+                    "maxLength": 240
+                  },
+                  "website": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "const": ""
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 500,
+                        "format": "uri"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "revision",
+                  "name",
+                  "tagline",
+                  "aboutTitle",
+                  "aboutBody",
+                  "contactEmail",
+                  "contactPhone",
+                  "address",
+                  "workingHours",
+                  "website"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "GET /api/admin/settings",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        }
+      }
+    },
+    "/api/admin/settings/logo/remove": {
+      "post": {
+        "summary": "POST /api/admin/settings/logo/remove",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "revision"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/settings/hesabpay": {
+      "put": {
+        "summary": "PUT /api/admin/settings/hesabpay",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "environment": {
+                    "type": "string",
+                    "enum": [
+                      "sandbox",
+                      "production"
+                    ]
+                  },
+                  "apiKey": {
+                    "type": "string",
+                    "minLength": 16,
+                    "maxLength": 500
+                  },
+                  "afnPerUsd": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 10000
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "merchantApproved": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "revision",
+                  "label",
+                  "environment",
+                  "afnPerUsd",
+                  "enabled",
+                  "merchantApproved"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "GET /api/admin/settings/hesabpay",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        }
+      }
+    },
+    "/api/orders/{id}/hesabpay-checkout": {
+      "post": {
+        "summary": "POST /api/orders/{id}/hesabpay-checkout",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1000000000
+                  },
+                  "expectedAfnMinor": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "expectedAccount": {
+                    "type": "string",
+                    "pattern": "^[a-f\\d]{24}$"
+                  }
+                },
+                "required": [
+                  "amount",
+                  "expectedAfnMinor",
+                  "expectedAccount"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog": {
+      "get": {
+        "summary": "GET /api/catalog",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "origin",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "grade",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/catalog/filters": {
+      "get": {
+        "summary": "GET /api/catalog/filters",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        }
+      }
+    },
+    "/api/catalog/{id}": {
+      "get": {
+        "summary": "GET /api/catalog/{id}",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/settings/public": {
+      "get": {
+        "summary": "GET /api/settings/public",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        }
+      }
+    },
+    "/api/settings/logo/{version}": {
+      "get": {
+        "summary": "GET /api/settings/logo/{version}",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/settings/photos/{id}": {
+      "get": {
+        "summary": "GET /api/settings/photos/{id}",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/me/avatar/{version}": {
+      "get": {
+        "summary": "GET /api/me/avatar/{version}",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/auth/sessions": {
+      "get": {
+        "summary": "GET /api/auth/sessions",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        }
+      }
+    },
+    "/api/products/{id}/video-info": {
+      "get": {
+        "summary": "GET /api/products/{id}/video-info",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/products/{id}/video": {
+      "get": {
+        "summary": "GET /api/products/{id}/video",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; API.md documents the response and domain constraints."
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/me/avatar": {
+      "post": {
+        "summary": "Upload normalized image (maximum 3 MiB)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "image/jpeg": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/png": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/webp": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated profile or public company settings"
+          },
+          "422": {
+            "description": "Invalid image or fields"
+          }
+        }
+      }
+    },
+    "/api/admin/settings/logo": {
+      "post": {
+        "summary": "Upload normalized image (maximum 3 MiB)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Settings-Revision",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "image/jpeg": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/png": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/webp": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated profile or public company settings"
+          },
+          "422": {
+            "description": "Invalid image or fields"
+          }
+        }
+      }
+    },
+    "/api/admin/settings/photos": {
+      "post": {
+        "summary": "Upload normalized image (maximum 3 MiB)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Settings-Revision",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "image/jpeg": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/png": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/webp": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated profile or public company settings"
+          },
+          "422": {
+            "description": "Invalid image or fields"
+          }
+        }
+      }
+    },
+    "/api/webhooks/hesabpay/{account}/{secret}": {
+      "post": {
+        "summary": "Private HesabPay callback; remote signature verification and exact attempt matching required",
+        "security": [],
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "signature",
+                  "timestamp",
+                  "user_id"
+                ],
+                "properties": {
+                  "signature": {
+                    "type": "string"
+                  },
+                  "timestamp": {
+                    "type": "string"
+                  },
+                  "user_id": {
+                    "type": "string"
+                  },
+                  "transaction_id": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "success": {
+                    "type": "boolean"
+                  },
+                  "status_code": {
+                    "type": "integer"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Processed or ignored verified event"
+          },
+          "400": {
+            "description": "Invalid callback, signature, amount or reference"
           }
         }
       }

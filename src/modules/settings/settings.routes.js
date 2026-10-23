@@ -1,6 +1,6 @@
 import express from "express";
 import { randomUUID } from "node:crypto";
-import { SystemSettings, CompanyLogo } from "./settings.model.js";
+import { SystemSettings, CompanyLogo, CompanyPhoto } from "./settings.model.js";
 import { publicSettings } from "./settings.service.js";
 import { normalizeProductImage } from "../catalog/product-images.service.js";
 import { wrap, roles, tx, audit } from "../../shared/services.js";
@@ -56,6 +56,26 @@ export function mountSettings(app) {
           const settings = await current(req.body.revision, s);
           const before = await publicSettings(s);
           const { revision, ...fields } = req.body;
+          if (fields.aboutImages) {
+            const existing = (await publicSettings(s)).aboutImages;
+            requireRule(
+              fields.aboutImages.every((x) =>
+                existing.some((y) => y.id === x.id),
+              ),
+              "Upload photos before linking them",
+            );
+          }
+          if (fields.aboutImages) {
+            const keep = fields.aboutImages.map((x) => x.id);
+            const removed = before.aboutImages.filter(
+              (x) => !keep.includes(x.id) && /^[a-f\d]{24}$/.test(x.id),
+            );
+            if (removed.length)
+              await CompanyPhoto.deleteMany(
+                { _id: { $in: removed.map((x) => x.id) } },
+                { session: s },
+              );
+          }
           Object.assign(settings, fields);
           settings.revision++;
           settings.updatedBy = req.user.id;

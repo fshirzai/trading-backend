@@ -36,6 +36,7 @@ export function mountCardRefunds(app, config) {
           requireRule(
             String(p.order) === String(r.order) &&
               p.method === "VISA" &&
+              p.provider !== "hesabpay" &&
               p.status === "Verified",
             "Verified card payment for this order required",
           );

@@ -106,10 +106,31 @@ export function mountSalesOperations(app, config) {
       const party = await entity(M.Party, customer);
       requireRule(party.type === "customer", "Customer party required");
       const out = await tx(async (s) => {
+        const rows = req.body.items || [{ product: product.id, quantity }];
+        requireRule(
+          rows[0].product === product.id && rows[0].quantity === quantity,
+          "Inquiry header must match first line",
+        );
+        requireRule(
+          new Set(rows.map((x) => x.product)).size === rows.length,
+          "Combine duplicate product lines",
+        );
+        const requested = [];
+        for (const row of rows) {
+          const p = await entity(M.Product, row.product, s);
+          requireRule(
+            p.active && row.quantity >= (p.moq || 0),
+            "Product unavailable or below minimum order",
+          );
+          requested.push({ ...row, snapshot: { name: p.name, unit: p.unit } });
+        }
         const [i] = await M.Inquiry.create(
           [
             {
               customer,
+              items: requested,
+              cartRequest: !!req.body.items,
+              preferredPayment: req.body.preferredPayment,
               product: product.id,
               quantity,
               source:
@@ -163,6 +184,10 @@ export function mountSalesOperations(app, config) {
         );
         const product = await entity(M.Product, i.product, s);
         requireRule(product.active, "Product inactive");
+        requireRule(
+          !i.items?.length || i.items.length === 1 || req.body.items?.length,
+          "Price every requested product line",
+        );
         const items = [];
         for (const row of req.body.items || [
           {
@@ -188,6 +213,23 @@ export function mountSalesOperations(app, config) {
               unit: pr.unit,
             },
           });
+        }
+        requireRule(
+          new Set(items.map((x) => String(x.product))).size === items.length,
+          "Combine duplicate quotation products",
+        );
+        if (i.cartRequest && i.items?.length) {
+          requireRule(
+            items.length === i.items.length &&
+              i.items.every((x) =>
+                items.some(
+                  (y) =>
+                    String(y.product) === String(x.product) &&
+                    y.quantity === x.quantity,
+                ),
+              ),
+            "Quotation must cover requested products and quantities; revise the inquiry for changes",
+          );
         }
         requireRule(
           items.reduce((n, x) => n + x.productCents, 0) === productCents,

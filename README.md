@@ -1,3 +1,7 @@
+# Version 2.4 update
+
+See [UPGRADE_2.4.md](UPGRADE_2.4.md) for the storefront, cart, content settings and HesabPay configuration.
+
 # Version 2.3 update
 
 See [UPGRADE_2.3.md](UPGRADE_2.3.md) for profile settings, company branding, and product video controls.

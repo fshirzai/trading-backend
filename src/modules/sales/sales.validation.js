@@ -22,6 +22,12 @@ export const salesSchemas = [
       product: oid,
       quantity: qty,
       destination: optional,
+      items: z
+        .array(strict({ product: oid, quantity: qty }))
+        .min(1)
+        .max(30)
+        .optional(),
+      preferredPayment: z.enum(["TT", "VISA"]).default("TT"),
       source: z
         .enum(["website", "whatsapp", "phone", "office"])
         .default("website"),

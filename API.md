@@ -182,3 +182,17 @@ All users can use `GET/PATCH /api/me/profile`, `POST /api/me/avatar`, `GET /api/
 Only admins can use `GET/PATCH /api/admin/settings`, `POST /api/admin/settings/logo`, and `POST /api/admin/settings/logo/remove`. PATCH takes the complete company form plus numeric `revision`. Logo upload takes raw JPEG/PNG/WebP with `X-Settings-Revision`; removal takes `{revision}`. Stale revisions return 409.
 
 Staff video preview: `GET /api/products/:id/video-info` and `GET /api/products/:id/video`, supporting byte ranges. Public active-product playback remains `GET /api/catalog/:id/video`.
+
+## Storefront and HesabPay (2.4)
+
+Public catalog: `GET /api/catalog` supports `search`, `category`, `origin`, `grade`, `limit`, and `cursor`. `GET /api/catalog/filters` lists active-product filter values; `GET /api/catalog/:id` returns one active product.
+
+`POST /api/inquiries` accepts optional `items: [{product,quantity}]` and `preferredPayment: TT|VISA`. Header product/quantity must match the first item. The customer is derived from the authenticated account. A cart becomes one inquiry, and its quotation must price every requested product and quantity.
+
+Company content: `POST /api/admin/settings/photos` accepts normalized raw image uploads with `X-Settings-Revision`. PATCH system settings updates photo ordering/removal and per-language content. `GET /api/settings/photos/:id` serves linked public company photos.
+
+HesabPay configuration: admin-only `GET/PUT /api/admin/settings/hesabpay`. PUT accepts `revision`, `label`, `environment`, optional replacement `apiKey`, `afnPerUsd`, `enabled`, and `merchantApproved`. Read responses never contain API keys.
+
+`POST /api/orders/:id/hesabpay-checkout` requires an idempotency key and `{amount,expectedAccount,expectedAfnMinor}`. `amount` is USD; the quoted AFN charge must match the server's merchant/rate snapshot. `GET /api/payment-methods` returns availability and non-secret conversion information.
+
+The private URL `POST /api/webhooks/hesabpay/:account/:secret` verifies the provider signature and matches the private merchant reference, transaction ID, item and amount. Duplicate transaction callbacks cannot post twice. Account credentials and the exchange-rate snapshot remain linked to the original attempt. Follow `UPGRADE_2.4.md` before enabling production.

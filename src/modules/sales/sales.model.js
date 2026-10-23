@@ -5,6 +5,15 @@ export const Inquiry = model("Inquiry", {
   quantity: { type: Number, min: 0.001, required: true },
   source: { type: String, enum: ["website", "whatsapp", "phone", "office"] },
   destination: String,
+  items: [
+    {
+      product: { type: Schema.Types.ObjectId, ref: "Product" },
+      quantity: Number,
+      snapshot: { name: { en: String, ps: String, fa: String }, unit: String },
+    },
+  ],
+  cartRequest: { type: Boolean, default: false },
+  preferredPayment: { type: String, enum: ["TT", "VISA"], default: "TT" },
   status: { type: String, default: "New" },
 });
 

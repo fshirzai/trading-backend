@@ -1,21 +1,22 @@
 {
-  "release": "2.2.0",
+  "release": "2.4.0",
   "date": "2026-10-23",
   "tests": {
-    "backend": 83,
-    "frontend": 22,
-    "ui": 11,
-    "integration": 1,
-    "dev": 1
+    "backendFull": 94,
+    "backendContentFollowUp": 11,
+    "frontendUnit": 27,
+    "frontendUI": 21,
+    "frontendBackendIntegration": 1,
+    "developmentEntry": 1,
+    "publicBrowserLayouts": 108,
+    "privateBrowserFlowsAndLayouts": 24
   },
   "failed": 0,
   "builds": [
-    "standard",
-    "vercel"
+    "vercel-mode",
+    "static-export"
   ],
-  "dependencyAuditReportedVulnerabilities": {
-    "backend": 0,
-    "frontend": 0
-  },
-  "liveDeploymentVerified": false
+  "liveDeploymentVerified": false,
+  "liveHesabPaySettlementVerified": false,
+  "paymentProviderTests": "Controlled API stub; own merchant sandbox validation required"
 }
